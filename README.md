@@ -194,6 +194,15 @@ By default, literal matching is performed. The assertion fails if
 }
 ```
 
+The expected output can be specified with a heredoc or standard input as well.
+
+```bash
+@test 'assert_output() with pipe' {
+  run echo 'have'
+  echo 'want' | assert_output
+}
+```
+
 On failure, the expected and actual output are displayed.
 
 ```
@@ -280,6 +289,15 @@ By default, literal matching is performed. The assertion fails if
 @test 'refute_output()' {
   run echo 'want'
   refute_output 'want'
+}
+```
+
+-The unexpected output can be specified with a heredoc or standard input as well.
+
+```bash
+@test 'refute_output() with pipe' {
+  run echo 'want'
+  echo 'want' | refute_output
 }
 ```
 

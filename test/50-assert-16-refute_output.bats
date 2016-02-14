@@ -25,6 +25,15 @@ load test_helper
   [ "${lines[2]}" == '--' ]
 }
 
+@test 'refute_output(): reads <unexpected> from STDIN' {
+  run echo 'a'
+  run refute_output <<INPUT
+b
+INPUT
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
 # Output formatting
 @test 'refute_output() <unexpected>: displays details in multi-line format if necessary' {
   run printf 'a 0\na 1'

@@ -10,7 +10,7 @@
 #
 # You should have received a copy of the CC0 Public Domain Dedication
 # along with this software. If not, see
-# <http://creativecommons.org/publicdomain/zero/1.0/>. 
+# <http://creativecommons.org/publicdomain/zero/1.0/>.
 #
 
 #
@@ -165,7 +165,8 @@ assert_failure() {
 }
 
 # Fail and display details if `$output' does not match the expected
-# output.
+# output. The expected output can be specified either by the first
+# parameter or on the standard input.
 #
 # By default, literal matching is performed. The assertion fails if the
 # expected output does not equal `$output'. Details include both values.
@@ -186,10 +187,12 @@ assert_failure() {
 #   -p, --partial - partial matching
 #   -e, --regexp - extended regular expression matching
 # Arguments:
-#   $1 - expected output
+#   $1 - [=STDIN] expected output
 # Returns:
 #   0 - expected matches the actual output
 #   1 - otherwise
+# Inputs:
+#   STDIN - [=$1] expected output
 # Outputs:
 #   STDERR - details, on failure
 #            error message, on error
@@ -215,7 +218,8 @@ assert_output() {
   fi
 
   # Arguments.
-  local -r expected="$1"
+  local expected
+  (( $# == 0 )) && expected="$(cat -)" || expected="$1"
 
   # Matching.
   if (( is_mode_regexp )); then
@@ -252,6 +256,8 @@ assert_output() {
 }
 
 # Fail and display details if `$output' matches the unexpected output.
+# The unexpected output can be specified either by the first parameter
+# or on the standard input.
 #
 # By default, literal matching is performed. The assertion fails if the
 # unexpected output equals `$output'. Details include `$output'.
@@ -274,10 +280,12 @@ assert_output() {
 #   -p, --partial - partial matching
 #   -e, --regexp - extended regular expression matching
 # Arguments:
-#   $1 - unexpected output
+#   $1 - [=STDIN] unexpected output
 # Returns:
 #   0 - unexpected matches the actual output
 #   1 - otherwise
+# Inputs:
+#   STDIN - [=$1] unexpected output
 # Outputs:
 #   STDERR - details, on failure
 #            error message, on error
@@ -303,7 +311,8 @@ refute_output() {
   fi
 
   # Arguments.
-  local -r unexpected="$1"
+  local unexpected
+  (( $# == 0 )) && unexpected="$(cat -)" || unexpected="$1"
 
   if (( is_mode_regexp == 1 )) && [[ '' =~ $unexpected ]] || (( $? == 2 )); then
     echo "Invalid extended regular expression: \`$unexpected'" \
