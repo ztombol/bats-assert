@@ -55,7 +55,7 @@ Fail if the given expression evaluates to false.
 
 ***Note:*** *The expression must be a simple command. [Compound
 commands][bash-comp-cmd], such as `[[`, can be used only when executed
-with `bash -c`.
+with `bash -c`.*
 
 ```bash
 @test 'assert()' {
