@@ -49,15 +49,13 @@ fail() {
   return 1
 }
 
-# Fail and display details if the expression evaluates to false. Details
-# include the expression, `$status' and `$output'.
+# Fail and display the expression if it evaluates to false.
 #
 # NOTE: The expression must be a simple command. Compound commands, such
 #       as `[[', can be used only when executed with `bash -c'.
 #
 # Globals:
-#   status
-#   output
+#   none
 # Arguments:
 #   $1 - expression
 # Returns:
@@ -67,18 +65,8 @@ fail() {
 #   STDERR - details, on failure
 assert() {
   if ! "$@"; then
-    { local -ar single=(
-        'expression' "$*"
-        'status'     "$status"
-      )
-      local -ar may_be_multi=(
-        'output'     "$output"
-      )
-      local -ir width="$( batslib_get_max_single_line_key_width \
-                            "${single[@]}" "${may_be_multi[@]}" )"
-      batslib_print_kv_single "$width" "${single[@]}"
-      batslib_print_kv_single_or_multi "$width" "${may_be_multi[@]}"
-    } | batslib_decorate 'assertion failed' \
+    batslib_print_kv_single 10 'expression' "$*" \
+      | batslib_decorate 'assertion failed' \
       | fail
   fi
 }
