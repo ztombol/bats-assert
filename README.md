@@ -73,6 +73,30 @@ expression : [ -e /var/log/test.log ]
 ```
 
 
+### `refute`
+
+Fail if the given expression evaluates to true.
+
+***Note:*** *The expression must be a simple command. [Compound
+commands][bash-comp-cmd], such as `[[`, can be used only when executed
+with `bash -c`.*
+
+```bash
+@test 'refute()' {
+  rm -f '/var/log/test.log'
+  refute [ -e '/var/log/test.log' ]
+}
+```
+
+On failure, the successful expression is displayed.
+
+```
+-- assertion succeeded, but it was expected to fail --
+expression : [ -e /var/log/test.log ]
+--
+```
+
+
 ### `assert_equal`
 
 Fail if the two parameters, actual and expected value respectively, do
