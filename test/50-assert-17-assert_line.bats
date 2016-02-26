@@ -325,3 +325,10 @@ test_index_r_regexp () {
   [ "${lines[1]}" == "Invalid extended regular expression: \`[.*'" ]
   [ "${lines[2]}" == '--' ]
 }
+
+@test "assert_line(): \`--' stops parsing options" {
+  run printf 'a\n-p\nc'
+  run assert_line -- '-p'
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}

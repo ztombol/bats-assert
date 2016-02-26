@@ -187,3 +187,10 @@ test_r_regexp () {
   [ "${lines[1]}" == "\`--partial' and \`--regexp' are mutually exclusive" ]
   [ "${lines[2]}" == '--' ]
 }
+
+@test "refute_output(): \`--' stops parsing options" {
+  run echo '--'
+  run refute_output -- '-p'
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}

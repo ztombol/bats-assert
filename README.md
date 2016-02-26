@@ -653,6 +653,23 @@ This option and partial matching (`--partial` or `-p`) are mutually
 exclusive. An error is displayed when used simultaneously.
 
 
+## Options
+
+For functions that have options, `--` disables option parsing for the
+remaining arguments to allow using arguments identical to one of the
+allowed options.
+
+```bash
+assert_output -- '-p'
+```
+
+Specifying `--` as an argument is similarly simple.
+
+```bash
+refute_line -- '--'
+```
+
+
 <!-- REFERENCES -->
 
 [bats]: https://github.com/sstephenson/bats

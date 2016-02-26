@@ -215,7 +215,7 @@ assert_output() {
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
-      --) break ;;
+      --) shift; break ;;
       *) break ;;
     esac
   done
@@ -308,7 +308,7 @@ refute_output() {
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
-      --) break ;;
+      --) shift; break ;;
       *) break ;;
     esac
   done
@@ -424,7 +424,7 @@ assert_line() {
         ;;
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
-      --) break ;;
+      --) shift; break ;;
       *) break ;;
     esac
   done
@@ -604,7 +604,7 @@ refute_line() {
         ;;
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
-      --) break ;;
+      --) shift; break ;;
       *) break ;;
     esac
   done
