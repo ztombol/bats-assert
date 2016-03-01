@@ -9,7 +9,7 @@ load test_helper
 }
 
 @test 'fail(): reads <message> from STDIN' {
-  run bash -c "source '${TEST_DEPS_DIR}/bats-core/load.bash'
+  run bash -c "source '${TEST_DEPS_DIR}/bats-support/load.bash'
                source '${TEST_MAIN_DIR}/load.bash'
                echo 'message' | fail"
   [ "$status" -eq 1 ]

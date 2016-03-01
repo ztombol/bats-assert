@@ -1,7 +1,7 @@
 language: bash
 before_install:
   - ./script/install-bats.sh
-  - git clone --depth 1 https://github.com/ztombol/bats-core ../bats-core
+  - git clone --depth 1 https://github.com/ztombol/bats-support ../bats-support
 before_script:
   - export PATH="${HOME}/.local/bin:${PATH}"
 script:

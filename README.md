@@ -8,7 +8,7 @@
 
 Assertions are functions that perform a test and output relevant
 information on failure to help debugging. They return 1 on failure and 0
-otherwise. Output, [formatted][bats-core-output] for readability, is
+otherwise. Output, [formatted][bats-support-output] for readability, is
 sent to the standard error to make assertions usable outside of `@test`
 blocks too.
 
@@ -16,7 +16,8 @@ Assertions testing exit code and output operate on the results of the
 most recent invocation of `run`.
 
 Dependencies:
-- [`bats-core`][bats-core] - output formatting
+- [`bats-support`][bats-support] (formerly `bats-core`) - output
+  formatting
 
 See the [shared documentation][bats-docs] to learn how to install and
 load this library.
@@ -676,7 +677,7 @@ refute_line -- '--'
 <!-- REFERENCES -->
 
 [bats]: https://github.com/sstephenson/bats
-[bats-core-output]: https://github.com/ztombol/bats-core#output-formatting
-[bats-core]: https://github.com/ztombol/bats-core
+[bats-support-output]: https://github.com/ztombol/bats-support#output-formatting
+[bats-support]: https://github.com/ztombol/bats-support
 [bats-docs]: https://github.com/ztombol/bats-docs
 [bash-comp-cmd]: https://www.gnu.org/software/bash/manual/bash.html#Compound-Commands

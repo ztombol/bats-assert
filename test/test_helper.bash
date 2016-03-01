@@ -3,7 +3,7 @@ setup() {
   export TEST_DEPS_DIR="${TEST_DEPS_DIR-${TEST_MAIN_DIR}/..}"
 
   # Load dependencies.
-  load "${TEST_DEPS_DIR}/bats-core/load.bash"
+  load "${TEST_DEPS_DIR}/bats-support/load.bash"
 
   # Load library.
   load '../load'
