@@ -26,34 +26,6 @@ load this library.
 
 ## Usage
 
-### `fail`
-
-Display an error message and fail. This function provides a convenient
-way to report failure in arbitrary situations. You can use it to
-implement your own helpers when the ones available do not meet your
-needs. Other functions use it internally as well.
-
-```bash
-@test 'fail()' {
-  fail 'this test always fails'
-}
-```
-
-The message can also be specified on the standard input.
-
-```bash
-@test 'fail() with pipe' {
-  echo 'this test always fails' | fail
-}
-```
-
-This function always fails and simply outputs the given message.
-
-```
-this test always fails
-```
-
-
 ### `assert`
 
 Fail if the given expression evaluates to false.

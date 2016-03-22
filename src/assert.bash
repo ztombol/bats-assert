@@ -30,25 +30,6 @@
 #                               ASSERTIONS
 ########################################################################
 
-# Fail and display a message. When no parameters are specified, the
-# message is read from the standard input. Other functions use this to
-# report failure.
-#
-# Globals:
-#   none
-# Arguments:
-#   $@ - [=STDIN] message
-# Returns:
-#   1 - always
-# Inputs:
-#   STDIN - [=$@] message
-# Outputs:
-#   STDERR - message
-fail() {
-  (( $# == 0 )) && batslib_err || batslib_err "$@"
-  return 1
-}
-
 # Fail and display the expression if it evaluates to false.
 #
 # NOTE: The expression must be a simple command. Compound commands, such
