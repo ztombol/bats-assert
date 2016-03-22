@@ -25,11 +25,6 @@
 # `output.bash' and sent to the standard error.
 #
 
-
-########################################################################
-#                               ASSERTIONS
-########################################################################
-
 # Fail and display the expression if it evaluates to false.
 #
 # NOTE: The expression must be a simple command. Compound commands, such
