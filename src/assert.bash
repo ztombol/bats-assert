@@ -219,9 +219,7 @@ assert_output() {
       echo "Invalid extended regular expression: \`$expected'" \
         | batslib_decorate 'ERROR: assert_output' \
         | fail
-      return $?
-    fi
-    if ! [[ $output =~ $expected ]]; then
+    elif ! [[ $output =~ $expected ]]; then
       batslib_print_kv_single_or_multi 6 \
           'regexp'  "$expected" \
           'output' "$output" \
