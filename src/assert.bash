@@ -185,9 +185,14 @@ assert_failure() {
 assert_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  local -i is_mode_nonempty=0
   local -i use_stdin=0
 
   # Handle options.
+  if (( $# == 0 )); then
+    is_mode_nonempty=1
+  fi
+
   while (( $# > 0 )); do
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
@@ -214,7 +219,13 @@ assert_output() {
   fi
 
   # Matching.
-  if (( is_mode_regexp )); then
+  if (( is_mode_nonempty )); then
+    if [ -z "$output" ]; then
+      echo 'expected non-empty output, but output was empty' \
+      | batslib_decorate 'no output' \
+      | fail
+    fi
+  elif (( is_mode_regexp )); then
     if [[ '' =~ $expected ]] || (( $? == 2 )); then
       echo "Invalid extended regular expression: \`$expected'" \
         | batslib_decorate 'ERROR: assert_output' \
