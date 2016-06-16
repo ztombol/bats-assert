@@ -185,12 +185,14 @@ assert_failure() {
 assert_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  local -i use_stdin=0
 
   # Handle options.
   while (( $# > 0 )); do
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
+      -) use_stdin=1; shift ;;
       --) shift; break ;;
       *) break ;;
     esac
@@ -205,7 +207,11 @@ assert_output() {
 
   # Arguments.
   local expected
-  (( $# == 0 )) && expected="$(cat -)" || expected="$1"
+  if (( use_stdin )); then
+    expected="$(cat -)"
+  else
+    expected="$1"
+  fi
 
   # Matching.
   if (( is_mode_regexp )); then
@@ -278,12 +284,14 @@ assert_output() {
 refute_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  local -i use_stdin=0
 
   # Handle options.
   while (( $# > 0 )); do
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
+      -) use_stdin=1; shift ;;
       --) shift; break ;;
       *) break ;;
     esac
@@ -298,7 +306,11 @@ refute_output() {
 
   # Arguments.
   local unexpected
-  (( $# == 0 )) && unexpected="$(cat -)" || unexpected="$1"
+  if (( use_stdin )); then
+    unexpected="$(cat -)"
+  else
+    unexpected="$1"
+  fi
 
   if (( is_mode_regexp == 1 )) && [[ '' =~ $unexpected ]] || (( $? == 2 )); then
     echo "Invalid extended regular expression: \`$unexpected'" \

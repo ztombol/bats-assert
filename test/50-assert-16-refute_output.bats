@@ -25,9 +25,9 @@ load test_helper
   [ "${lines[2]}" == '--' ]
 }
 
-@test 'refute_output(): reads <unexpected> from STDIN' {
-  run echo 'a'
-  run refute_output <<INPUT
+@test 'refute_output() - : reads <unexpected> from STDIN' {
+  run echo '-'
+  run refute_output - <<INPUT
 b
 INPUT
   [ "$status" -eq 0 ]
