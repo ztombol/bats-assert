@@ -293,9 +293,14 @@ assert_output() {
 refute_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  local -i is_mode_empty=0
   local -i use_stdin=0
 
   # Handle options.
+  if (( $# == 0 )); then
+    is_mode_empty=1
+  fi
+
   while (( $# > 0 )); do
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
@@ -329,7 +334,13 @@ refute_output() {
   fi
 
   # Matching.
-  if (( is_mode_regexp )); then
+  if (( is_mode_empty )); then
+    if [ -n "$output" ]; then
+      echo 'expected no output, but output was non-empty' \
+      | batslib_decorate 'unexpected output' \
+      | fail
+    fi
+  elif (( is_mode_regexp )); then
     if [[ $output =~ $unexpected ]] || (( $? == 0 )); then
       batslib_print_kv_single_or_multi 6 \
           'regexp'  "$unexpected" \
