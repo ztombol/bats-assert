@@ -211,6 +211,26 @@ actual   : have
 If either value is longer than one line both are displayed in
 *multi-line* format.
 
+#### Existence
+
+To assert that any (non-empty) output exists at all, simply omit the matching
+argument.
+
+```bash
+@test 'assert_output()' {
+  run echo 'have'
+  assert_output
+}
+```
+
+On failure, an error message is displayed.
+
+```
+-- no output --
+expected non-empty output, but output was empty
+--
+```
+
 #### Partial matching
 
 Partial matching can be enabled with the `--partial` option (`-p` for
@@ -308,6 +328,25 @@ output : want
 
 If output is longer than one line it is displayed in *multi-line*
 format.
+
+#### Existence
+
+To assert that there is no output at all, simply omit the matching argument.
+
+```bash
+@test 'refute_output()' {
+  run foo --silent
+  refute_output
+}
+```
+
+On failure, an error message is displayed.
+
+```
+-- unexpected output --
+expected no output, but output was non-empty
+--
+```
 
 #### Partial matching
 
