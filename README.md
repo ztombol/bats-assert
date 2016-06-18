@@ -189,12 +189,13 @@ By default, literal matching is performed. The assertion fails if
 }
 ```
 
-The expected output can be specified with a heredoc or standard input as well.
+The expected output can be specified with a heredoc or standard input as well,
+by providing `-` as an option.
 
 ```bash
 @test 'assert_output() with pipe' {
   run echo 'have'
-  echo 'want' | assert_output
+  echo 'want' | assert_output -
 }
 ```
 
@@ -287,12 +288,13 @@ By default, literal matching is performed. The assertion fails if
 }
 ```
 
--The unexpected output can be specified with a heredoc or standard input as well.
+The unexpected output can be specified with a heredoc or standard input as well,
+by providing `-` as an option.
 
 ```bash
 @test 'refute_output() with pipe' {
   run echo 'want'
-  echo 'want' | refute_output
+  echo 'want' | refute_output -
 }
 ```
 
