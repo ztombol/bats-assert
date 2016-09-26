@@ -185,12 +185,19 @@ assert_failure() {
 assert_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  local -i is_mode_nonempty=0
+  local -i use_stdin=0
 
   # Handle options.
+  if (( $# == 0 )); then
+    is_mode_nonempty=1
+  fi
+
   while (( $# > 0 )); do
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
+      -) use_stdin=1; shift ;;
       --) shift; break ;;
       *) break ;;
     esac
@@ -205,17 +212,25 @@ assert_output() {
 
   # Arguments.
   local expected
-  (( $# == 0 )) && expected="$(cat -)" || expected="$1"
+  if (( use_stdin )); then
+    expected="$(cat -)"
+  else
+    expected="$1"
+  fi
 
   # Matching.
-  if (( is_mode_regexp )); then
+  if (( is_mode_nonempty )); then
+    if [ -z "$output" ]; then
+      echo 'expected non-empty output, but output was empty' \
+        | batslib_decorate 'no output' \
+        | fail
+    fi
+  elif (( is_mode_regexp )); then
     if [[ '' =~ $expected ]] || (( $? == 2 )); then
       echo "Invalid extended regular expression: \`$expected'" \
         | batslib_decorate 'ERROR: assert_output' \
         | fail
-      return $?
-    fi
-    if ! [[ $output =~ $expected ]]; then
+    elif ! [[ $output =~ $expected ]]; then
       batslib_print_kv_single_or_multi 6 \
           'regexp'  "$expected" \
           'output' "$output" \
@@ -278,12 +293,19 @@ assert_output() {
 refute_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  local -i is_mode_empty=0
+  local -i use_stdin=0
 
   # Handle options.
+  if (( $# == 0 )); then
+    is_mode_empty=1
+  fi
+
   while (( $# > 0 )); do
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
+      -) use_stdin=1; shift ;;
       --) shift; break ;;
       *) break ;;
     esac
@@ -298,7 +320,11 @@ refute_output() {
 
   # Arguments.
   local unexpected
-  (( $# == 0 )) && unexpected="$(cat -)" || unexpected="$1"
+  if (( use_stdin )); then
+    unexpected="$(cat -)"
+  else
+    unexpected="$1"
+  fi
 
   if (( is_mode_regexp == 1 )) && [[ '' =~ $unexpected ]] || (( $? == 2 )); then
     echo "Invalid extended regular expression: \`$unexpected'" \
@@ -308,7 +334,14 @@ refute_output() {
   fi
 
   # Matching.
-  if (( is_mode_regexp )); then
+  if (( is_mode_empty )); then
+    if [ -n "$output" ]; then
+      batslib_print_kv_single_or_multi 6 \
+          'output' "$output" \
+        | batslib_decorate 'output non-empty, but expected no output' \
+        | fail
+    fi
+  elif (( is_mode_regexp )); then
     if [[ $output =~ $unexpected ]] || (( $? == 0 )); then
       batslib_print_kv_single_or_multi 6 \
           'regexp'  "$unexpected" \

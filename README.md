@@ -189,12 +189,13 @@ By default, literal matching is performed. The assertion fails if
 }
 ```
 
-The expected output can be specified with a heredoc or standard input as well.
+The expected output can be specified with a heredoc or standard input as well,
+by providing `-` as an option.
 
 ```bash
 @test 'assert_output() with pipe' {
   run echo 'have'
-  echo 'want' | assert_output
+  echo 'want' | assert_output -
 }
 ```
 
@@ -209,6 +210,26 @@ actual   : have
 
 If either value is longer than one line both are displayed in
 *multi-line* format.
+
+#### Existence
+
+To assert that any (non-empty) output exists at all, simply omit the matching
+argument.
+
+```bash
+@test 'assert_output()' {
+  run echo 'have'
+  assert_output
+}
+```
+
+On failure, an error message is displayed.
+
+```
+-- no output --
+expected non-empty output, but output was empty
+--
+```
 
 #### Partial matching
 
@@ -287,12 +308,13 @@ By default, literal matching is performed. The assertion fails if
 }
 ```
 
--The unexpected output can be specified with a heredoc or standard input as well.
+The unexpected output can be specified with a heredoc or standard input as well,
+by providing `-` as an option.
 
 ```bash
 @test 'refute_output() with pipe' {
   run echo 'want'
-  echo 'want' | refute_output
+  echo 'want' | refute_output -
 }
 ```
 
@@ -306,6 +328,25 @@ output : want
 
 If output is longer than one line it is displayed in *multi-line*
 format.
+
+#### Existence
+
+To assert that there is no output at all, simply omit the matching argument.
+
+```bash
+@test 'refute_output()' {
+  run foo --silent
+  refute_output
+}
+```
+
+On failure, an error message is displayed.
+
+```
+-- unexpected output --
+expected no output, but output was non-empty
+--
+```
 
 #### Partial matching
 

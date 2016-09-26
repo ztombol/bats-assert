@@ -25,9 +25,26 @@ load test_helper
   [ "${lines[2]}" == '--' ]
 }
 
-@test 'refute_output(): reads <unexpected> from STDIN' {
+@test 'refute_output(): succeeds if output is empty' {
+  run echo ''
+  run refute_output
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
+@test 'refute_output(): fails if output is non-empty' {
   run echo 'a'
-  run refute_output <<INPUT
+  run refute_output
+  [ "$status" -eq 1 ]
+  [ "${#lines[@]}" -eq 3 ]
+  [ "${lines[0]}" == '-- output non-empty, but expected no output --' ]
+  [ "${lines[1]}" == 'output : a' ]
+  [ "${lines[2]}" == '--' ]
+}
+
+@test 'refute_output() - : reads <unexpected> from STDIN' {
+  run echo '-'
+  run refute_output - <<INPUT
 b
 INPUT
   [ "$status" -eq 0 ]
