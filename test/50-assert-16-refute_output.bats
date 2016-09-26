@@ -37,8 +37,8 @@ load test_helper
   run refute_output
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- unexpected output --' ]
-  [ "${lines[1]}" == 'expected no output, but output was non-empty' ]
+  [ "${lines[0]}" == '-- output non-empty, but expected no output --' ]
+  [ "${lines[1]}" == 'output : a' ]
   [ "${lines[2]}" == '--' ]
 }
 

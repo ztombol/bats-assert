@@ -336,8 +336,9 @@ refute_output() {
   # Matching.
   if (( is_mode_empty )); then
     if [ -n "$output" ]; then
-      echo 'expected no output, but output was non-empty' \
-        | batslib_decorate 'unexpected output' \
+      batslib_print_kv_single_or_multi 6 \
+          'output' "$output" \
+        | batslib_decorate 'output non-empty, but expected no output' \
         | fail
     fi
   elif (( is_mode_regexp )); then
