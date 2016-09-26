@@ -28,7 +28,6 @@ load test_helper
 @test 'refute_output(): succeeds if output is empty' {
   run echo ''
   run refute_output
-echo "$output"
   [ "$status" -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
@@ -36,7 +35,6 @@ echo "$output"
 @test 'refute_output(): fails if output is non-empty' {
   run echo 'a'
   run refute_output
-echo "$output"
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 3 ]
   [ "${lines[0]}" == '-- unexpected output --' ]

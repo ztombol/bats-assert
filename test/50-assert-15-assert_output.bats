@@ -29,7 +29,6 @@ load test_helper
 @test 'assert_output(): succeeds if output is non-empty' {
   run echo 'a'
   run assert_output
-echo "$output"
   [ "$status" -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
@@ -37,7 +36,6 @@ echo "$output"
 @test 'assert_output(): fails if output is empty' {
   run echo ''
   run assert_output
-echo "$output"
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 3 ]
   [ "${lines[0]}" == '-- no output --' ]
@@ -50,7 +48,6 @@ echo "$output"
   run assert_output - <<STDIN
 a
 STDIN
-echo "$output"
   [ "$status" -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
