@@ -222,8 +222,8 @@ assert_output() {
   if (( is_mode_nonempty )); then
     if [ -z "$output" ]; then
       echo 'expected non-empty output, but output was empty' \
-      | batslib_decorate 'no output' \
-      | fail
+        | batslib_decorate 'no output' \
+        | fail
     fi
   elif (( is_mode_regexp )); then
     if [[ '' =~ $expected ]] || (( $? == 2 )); then
@@ -337,8 +337,8 @@ refute_output() {
   if (( is_mode_empty )); then
     if [ -n "$output" ]; then
       echo 'expected no output, but output was non-empty' \
-      | batslib_decorate 'unexpected output' \
-      | fail
+        | batslib_decorate 'unexpected output' \
+        | fail
     fi
   elif (( is_mode_regexp )); then
     if [[ $output =~ $unexpected ]] || (( $? == 0 )); then
