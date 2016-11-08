@@ -36,6 +36,16 @@ echo "$output"
   [ "${#lines[@]}" -eq 0 ]
 }
 
+@test 'assert_output() --stdin : reads <expected> from STDIN' {
+  run echo 'a'
+  run assert_output --stdin <<STDIN
+a
+STDIN
+echo "$output"
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
 # Output formatting
 @test "assert_output() <expected>: displays details in multi-line format if \`\$output' is longer than one line" {
   run printf 'b 0\nb 1'

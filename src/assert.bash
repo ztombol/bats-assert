@@ -172,7 +172,7 @@ assert_failure() {
 # Options:
 #   -p, --partial - partial matching
 #   -e, --regexp - extended regular expression matching
-#   - - read expected output from the standard input
+#   -, --stdin - read expected output from the standard input
 # Arguments:
 #   $1 - expected output
 # Returns:
@@ -193,7 +193,7 @@ assert_output() {
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
-      -) use_stdin=1; shift ;;
+      -|--stdin) use_stdin=1; shift ;;
       --) shift; break ;;
       *) break ;;
     esac
@@ -270,7 +270,7 @@ assert_output() {
 # Options:
 #   -p, --partial - partial matching
 #   -e, --regexp - extended regular expression matching
-#   - - read unexpected output from the standard input
+#   -, --stdin - read unexpected output from the standard input
 # Arguments:
 #   $1 - unexpected output
 # Returns:
@@ -291,7 +291,7 @@ refute_output() {
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
-      -) use_stdin=1; shift ;;
+      -|--stdin) use_stdin=1; shift ;;
       --) shift; break ;;
       *) break ;;
     esac

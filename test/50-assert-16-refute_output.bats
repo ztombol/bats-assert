@@ -34,6 +34,15 @@ INPUT
   [ "${#lines[@]}" -eq 0 ]
 }
 
+@test 'refute_output() --stdin : reads <unexpected> from STDIN' {
+  run echo '--stdin'
+  run refute_output --stdin <<INPUT
+b
+INPUT
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
 # Output formatting
 @test 'refute_output() <unexpected>: displays details in multi-line format if necessary' {
   run printf 'a 0\na 1'
