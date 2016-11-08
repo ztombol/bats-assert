@@ -172,8 +172,9 @@ assert_failure() {
 # Options:
 #   -p, --partial - partial matching
 #   -e, --regexp - extended regular expression matching
+#   - - read expected output from the standard input
 # Arguments:
-#   $1 - [=STDIN] expected output
+#   $1 - expected output
 # Returns:
 #   0 - expected matches the actual output
 #   1 - otherwise
@@ -269,8 +270,9 @@ assert_output() {
 # Options:
 #   -p, --partial - partial matching
 #   -e, --regexp - extended regular expression matching
+#   - - read unexpected output from the standard input
 # Arguments:
-#   $1 - [=STDIN] unexpected output
+#   $1 - unexpected output
 # Returns:
 #   0 - unexpected matches the actual output
 #   1 - otherwise
