@@ -172,8 +172,9 @@ assert_failure() {
 # Options:
 #   -p, --partial - partial matching
 #   -e, --regexp - extended regular expression matching
+#   -, --stdin - read expected output from the standard input
 # Arguments:
-#   $1 - [=STDIN] expected output
+#   $1 - expected output
 # Returns:
 #   0 - expected matches the actual output
 #   1 - otherwise
@@ -185,12 +186,14 @@ assert_failure() {
 assert_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  local -i use_stdin=0
 
   # Handle options.
   while (( $# > 0 )); do
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
+      -|--stdin) use_stdin=1; shift ;;
       --) shift; break ;;
       *) break ;;
     esac
@@ -205,7 +208,11 @@ assert_output() {
 
   # Arguments.
   local expected
-  (( $# == 0 )) && expected="$(cat -)" || expected="$1"
+  if (( use_stdin )); then
+    expected="$(cat -)"
+  else
+    expected="$1"
+  fi
 
   # Matching.
   if (( is_mode_regexp )); then
@@ -213,9 +220,7 @@ assert_output() {
       echo "Invalid extended regular expression: \`$expected'" \
         | batslib_decorate 'ERROR: assert_output' \
         | fail
-      return $?
-    fi
-    if ! [[ $output =~ $expected ]]; then
+    elif ! [[ $output =~ $expected ]]; then
       batslib_print_kv_single_or_multi 6 \
           'regexp'  "$expected" \
           'output' "$output" \
@@ -265,8 +270,9 @@ assert_output() {
 # Options:
 #   -p, --partial - partial matching
 #   -e, --regexp - extended regular expression matching
+#   -, --stdin - read unexpected output from the standard input
 # Arguments:
-#   $1 - [=STDIN] unexpected output
+#   $1 - unexpected output
 # Returns:
 #   0 - unexpected matches the actual output
 #   1 - otherwise
@@ -278,12 +284,14 @@ assert_output() {
 refute_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  local -i use_stdin=0
 
   # Handle options.
   while (( $# > 0 )); do
     case "$1" in
       -p|--partial) is_mode_partial=1; shift ;;
       -e|--regexp) is_mode_regexp=1; shift ;;
+      -|--stdin) use_stdin=1; shift ;;
       --) shift; break ;;
       *) break ;;
     esac
@@ -298,7 +306,11 @@ refute_output() {
 
   # Arguments.
   local unexpected
-  (( $# == 0 )) && unexpected="$(cat -)" || unexpected="$1"
+  if (( use_stdin )); then
+    unexpected="$(cat -)"
+  else
+    unexpected="$1"
+  fi
 
   if (( is_mode_regexp == 1 )) && [[ '' =~ $unexpected ]] || (( $? == 2 )); then
     echo "Invalid extended regular expression: \`$unexpected'" \

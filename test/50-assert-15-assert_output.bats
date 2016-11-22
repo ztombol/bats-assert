@@ -26,12 +26,20 @@ load test_helper
   [ "${lines[3]}" == '--' ]
 }
 
-@test 'assert_output(): reads <expected> from STDIN' {
+@test 'assert_output() - : reads <expected> from STDIN' {
   run echo 'a'
-  run assert_output <<STDIN
+  run assert_output - <<STDIN
 a
 STDIN
-echo "$output"
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
+@test 'assert_output() --stdin : reads <expected> from STDIN' {
+  run echo 'a'
+  run assert_output --stdin <<STDIN
+a
+STDIN
   [ "$status" -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
