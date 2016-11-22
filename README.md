@@ -189,16 +189,6 @@ By default, literal matching is performed. The assertion fails if
 }
 ```
 
-The expected output can be specified with a heredoc or standard input as well,
-by providing `-` as an option.
-
-```bash
-@test 'assert_output() with pipe' {
-  run echo 'have'
-  echo 'want' | assert_output -
-}
-```
-
 On failure, the expected and actual output are displayed.
 
 ```
@@ -267,6 +257,23 @@ invalid.
 This option and partial matching (`--partial` or `-p`) are mutually
 exclusive. An error is displayed when used simultaneously.
 
+#### Standard Input, HereDocs and HereStrings
+
+The expected output can be specified via standard input (also
+heredoc/herestring) with the `-`/`--stdin` option.
+
+```bash
+@test 'assert_output() with pipe' {
+  run echo 'hello'
+  echo 'hello' | assert_output -
+}
+
+@test 'assert_output() with herestring' {
+  run echo 'hello'
+  assert_output - <<< hello
+}
+```
+
 
 ### `refute_output`
 
@@ -285,16 +292,6 @@ By default, literal matching is performed. The assertion fails if
 @test 'refute_output()' {
   run echo 'want'
   refute_output 'want'
-}
-```
-
-The unexpected output can be specified with a heredoc or standard input as well,
-by providing `-` as an option.
-
-```bash
-@test 'refute_output() with pipe' {
-  run echo 'want'
-  echo 'want' | refute_output -
 }
 ```
 
@@ -364,6 +361,23 @@ invalid.
 
 This option and partial matching (`--partial` or `-p`) are mutually
 exclusive. An error is displayed when used simultaneously.
+
+#### Standard Input, HereDocs and HereStrings
+
+The unexpected output can be specified via standard input (also
+heredoc/herestring) with the `-`/`--stdin` option.
+
+```bash
+@test 'refute_output() with pipe' {
+  run echo 'hello'
+  echo 'world' | refute_output -
+}
+
+@test 'refute_output() with herestring' {
+  run echo 'hello'
+  refute_output - <<< world
+}
+```
 
 
 ### `assert_line`
