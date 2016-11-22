@@ -2,6 +2,10 @@
 
 load test_helper
 
+assert_quiet_exit() {
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
 
 #
 # Literal matching
@@ -11,8 +15,7 @@ load test_helper
 @test "assert_output() <expected>: returns 0 if <expected> equals \`\$output'" {
   run echo 'a'
   run assert_output 'a'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "assert_output() <expected>: returns 1 and displays details if <expected> does not equal \`\$output'" {
@@ -31,8 +34,7 @@ load test_helper
   run assert_output - <<STDIN
 a
 STDIN
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'assert_output() --stdin : reads <expected> from STDIN' {
@@ -40,8 +42,7 @@ STDIN
   run assert_output --stdin <<STDIN
 a
 STDIN
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 # Output formatting
@@ -85,28 +86,23 @@ STDIN
 # Partial matching: `-p' and `--partial'
 #
 
-# Options
-test_p_partial () {
-  run echo 'abc'
-  run assert_output "$1" 'b'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'assert_output() -p <partial>: enables partial matching' {
-  test_p_partial -p
+  run echo 'abc'
+  run assert_output -p 'b'
+  assert_quiet_exit
 }
 
 @test 'assert_output() --partial <partial>: enables partial matching' {
-  test_p_partial --partial
+  run echo 'abc'
+  run assert_output --partial 'b'
+  assert_quiet_exit
 }
 
 # Correctness
 @test "assert_output() --partial <partial>: returns 0 if <partial> is a substring in \`\$output'" {
   run printf 'a\nb\nc'
   run assert_output --partial 'b'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "assert_output() --partial <partial>: returns 1 and displays details if <partial> is not a substring in \`\$output'" {
@@ -154,28 +150,23 @@ test_p_partial () {
 # Regular expression matching: `-e' and `--regexp'
 #
 
-# Options
-test_r_regexp () {
-  run echo 'abc'
-  run assert_output "$1" '^a'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'assert_output() -e <regexp>: enables regular expression matching' {
-  test_r_regexp -e
+  run echo 'abc'
+  run assert_output -e '^a'
+  assert_quiet_exit
 }
 
 @test 'assert_output() --regexp <regexp>: enables regular expression matching' {
-  test_r_regexp --regexp
+  run echo 'abc'
+  run assert_output --regexp '^a'
+  assert_quiet_exit
 }
 
 # Correctness
 @test "assert_output() --regexp <regexp>: returns 0 if <regexp> matches \`\$output'" {
   run printf 'a\nb\nc'
   run assert_output --regexp '.*b.*'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "assert_output() --regexp <regexp>: returns 1 and displays details if <regexp> does not match \`\$output'" {
@@ -245,6 +236,5 @@ test_r_regexp () {
 @test "assert_output(): \`--' stops parsing options" {
   run echo '-p'
   run assert_output -- '-p'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
