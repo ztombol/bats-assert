@@ -31,7 +31,6 @@ load test_helper
   run assert_output - <<STDIN
 a
 STDIN
-echo "$output"
   [ "$status" -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
@@ -41,7 +40,6 @@ echo "$output"
   run assert_output --stdin <<STDIN
 a
 STDIN
-echo "$output"
   [ "$status" -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
