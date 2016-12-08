@@ -98,6 +98,31 @@ If either value is longer than one line both are displayed in
 *multi-line* format.
 
 
+### `assert_contains`
+
+Fail and display details if the expected value is not contained
+in the provided array. Details include both values.
+
+```bash
+@test 'assert_contains()' {
+  local items=(one two three)
+  assert_contains "four" "${items[@]}"
+}
+```
+
+On failure, the expected and array values are displayed.
+
+```
+-- item was not found in the array --
+expected : four
+actual   : one two three
+--
+```
+
+If either value is longer than one line both are displayed in
+*multi-line* format.
+
+
 ### `assert_success`
 
 Fail if `$status` is not 0.
