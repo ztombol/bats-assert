@@ -92,6 +92,35 @@ assert_equal() {
   fi
 }
 
+# Fail and display details if the expected value is not contained
+# in the provided array. Details include both values.
+#
+# Globals:
+#   none
+# Arguments:
+#   $1 - expected value
+#   ${@:2} - array of values to search
+# Returns:
+#   0 - value is found in array
+#   1 - otherwise
+# Outputs:
+#   STDERR - details, on failure
+assert_contains() {
+  local item
+  local items=(${@:2})
+  for item in "${items[@]}"; do
+    if [[ "$item" == "$1" ]]; then
+      return 0
+    fi
+  done
+
+  batslib_print_kv_single_or_multi 8 \
+        'expected' "$1" \
+        'actual'   "${items[*]}" \
+      | batslib_decorate 'item was not found in the array' \
+      | fail
+}
+
 # Fail and display details if `$status' is not 0. Details include
 # `$status' and `$output'.
 #
