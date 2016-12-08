@@ -4,7 +4,15 @@ load test_helper
 
 @test 'assert_contains() <item> <items>: returns 0 if <item> is in <items>' {
   local items=(one two three)
-  run assert_contains two ${items[@]}
+  run assert_contains two "${items[@]}"
+
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
+@test 'assert_contains() <item> <items>: returns 0 if <item> containing spaces is in <items>' {
+  local items=("one two" three)
+  run assert_contains "one two" "${items[@]}"
 
   [ "$status" -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
@@ -12,7 +20,7 @@ load test_helper
 
 @test 'assert_contains() <item> <items>: returns 1 and displays details if <item> is not in <items>' {
   local items=(one two three)
-  run assert_contains four ${items[@]}
+  run assert_contains four "${items[@]}"
 
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 4 ]
