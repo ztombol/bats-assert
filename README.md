@@ -5,24 +5,18 @@
 [![npm release](https://img.shields.io/npm/v/bats-assert.svg)](https://www.npmjs.com/package/bats-assert)
 [![Build Status](https://travis-ci.org/jasonkarns/bats-assert-1.svg?branch=master)](https://travis-ci.org/jasonkarns/bats-assert-1)
 
-`bats-assert` is a helper library providing common assertions for
-[Bats][bats].
+`bats-assert` is a helper library providing common assertions for [Bats][bats].
 
-Assertions are functions that perform a test and output relevant
-information on failure to help debugging. They return 1 on failure and 0
-otherwise. Output, [formatted][bats-support-output] for readability, is
-sent to the standard error to make assertions usable outside of `@test`
-blocks too.
+Assertions are functions that perform a test and output relevant information on failure to help debugging.
+They return 1 on failure and 0 otherwise.
+Output, [formatted][bats-support-output] for readability, is sent to the standard error to make assertions usable outside of `@test` blocks too.
 
-Assertions testing exit code and output operate on the results of the
-most recent invocation of `run`.
+Assertions testing exit code and output operate on the results of the most recent invocation of `run`.
 
 Dependencies:
-- [`bats-support`][bats-support] (formerly `bats-core`) - output
-  formatting
+- [`bats-support`][bats-support] (formerly `bats-core`) - output formatting
 
-See the [shared documentation][bats-docs] to learn how to install and
-load this library.
+See the [shared documentation][bats-docs] to learn how to install and load this library.
 
 
 ## Usage
@@ -31,9 +25,9 @@ load this library.
 
 Fail if the given expression evaluates to false.
 
-***Note:*** *The expression must be a simple command. [Compound
-commands][bash-comp-cmd], such as `[[`, can be used only when executed
-with `bash -c`.*
+***Note:***
+*The expression must be a simple command.
+[Compound commands][bash-comp-cmd], such as `[[`, can be used only when executed with `bash -c`.*
 
 ```bash
 @test 'assert()' {
@@ -55,9 +49,9 @@ expression : [ -e /var/log/test.log ]
 
 Fail if the given expression evaluates to true.
 
-***Note:*** *The expression must be a simple command. [Compound
-commands][bash-comp-cmd], such as `[[`, can be used only when executed
-with `bash -c`.*
+***Note:***
+*The expression must be a simple command.
+[Compound commands][bash-comp-cmd], such as `[[`, can be used only when executed with `bash -c`.*
 
 ```bash
 @test 'refute()' {
@@ -77,8 +71,7 @@ expression : [ -e /var/log/test.log ]
 
 ### `assert_equal`
 
-Fail if the two parameters, actual and expected value respectively, do
-not equal.
+Fail if the two parameters, actual and expected value respectively, do not equal.
 
 ```bash
 @test 'assert_equal()' {
@@ -95,8 +88,7 @@ actual   : have
 --
 ```
 
-If either value is longer than one line both are displayed in
-*multi-line* format.
+If either value is longer than one line both are displayed in *multi-line* format.
 
 
 ### `assert_success`
@@ -119,8 +111,7 @@ output : Error!
 --
 ```
 
-If `$output` is longer than one line, it is displayed in *multi-line*
-format.
+If `$output` is longer than one line, it is displayed in *multi-line* format.
 
 
 ### `assert_failure`
@@ -142,13 +133,11 @@ output : Success!
 --
 ```
 
-If `$output` is longer than one line, it is displayed in *multi-line*
-format.
+If `$output` is longer than one line, it is displayed in *multi-line* format.
 
 #### Expected status
 
-When one parameter is specified, fail if `$status` does not equal the
-expected status specified by the parameter.
+When one parameter is specified, fail if `$status` does not equal the expected status specified by the parameter.
 
 ```bash
 @test 'assert_failure() with expected status' {
@@ -167,21 +156,19 @@ output   : Error!
 --
 ```
 
-If `$output` is longer than one line, it is displayed in *multi-line*
-format.
+If `$output` is longer than one line, it is displayed in *multi-line* format.
 
 
 ### `assert_output`
 
-This function helps to verify that a command or function produces the
-correct output by checking that the specified expected output matches
-the actual output. Matching can be literal (default), partial or regular
-expression. This function is the logical complement of `refute_output`.
+This function helps to verify that a command or function produces the correct output by checking that the specified expected output matches the actual output.
+Matching can be literal (default), partial or regular expression.
+This function is the logical complement of `refute_output`.
 
 #### Literal matching
 
-By default, literal matching is performed. The assertion fails if
-`$output` does not equal the expected output.
+By default, literal matching is performed.
+The assertion fails if `$output` does not equal the expected output.
 
 ```bash
 @test 'assert_output()' {
@@ -199,13 +186,11 @@ actual   : have
 --
 ```
 
-If either value is longer than one line both are displayed in
-*multi-line* format.
+If either value is longer than one line both are displayed in *multi-line* format.
 
 #### Existence
 
-To assert that any (non-empty) output exists at all, simply omit the matching
-argument.
+To assert that any (non-empty) output exists at all, simply omit the matching argument.
 
 ```bash
 @test 'assert_output()' {
@@ -224,9 +209,8 @@ expected non-empty output, but output was empty
 
 #### Partial matching
 
-Partial matching can be enabled with the `--partial` option (`-p` for
-short). When used, the assertion fails if the expected *substring* is
-not found in `$output`.
+Partial matching can be enabled with the `--partial` option (`-p` for short).
+When used, the assertion fails if the expected *substring* is not found in `$output`.
 
 ```bash
 @test 'assert_output() partial matching' {
@@ -244,17 +228,15 @@ output    : ERROR: no such file or directory
 --
 ```
 
-This option and regular expression matching (`--regexp` or `-e`) are
-mutually exclusive. An error is displayed when used simultaneously.
+This option and regular expression matching (`--regexp` or `-e`) are mutually exclusive.
+An error is displayed when used simultaneously.
 
 #### Regular expression matching
 
-Regular expression matching can be enabled with the `--regexp` option
-(`-e` for short). When used, the assertion fails if the *extended
-regular expression* does not match `$output`.
+Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
+When used, the assertion fails if the *extended regular expression* does not match `$output`.
 
-*Note: The anchors `^` and `$` bind to the beginning and the end of the
-entire output (not individual lines), respectively.*
+*Note: The anchors `^` and `$` bind to the beginning and the end of the entire output (not individual lines), respectively.*
 
 ```bash
 @test 'assert_output() regular expression matching' {
@@ -272,16 +254,14 @@ output : Foobar 0.1.0
 --
 ```
 
-An error is displayed if the specified extended regular expression is
-invalid.
+An error is displayed if the specified extended regular expression is invalid.
 
-This option and partial matching (`--partial` or `-p`) are mutually
-exclusive. An error is displayed when used simultaneously.
+This option and partial matching (`--partial` or `-p`) are mutually exclusive.
+An error is displayed when used simultaneously.
 
 #### Standard Input, HereDocs and HereStrings
 
-The expected output can be specified via standard input (also
-heredoc/herestring) with the `-`/`--stdin` option.
+The expected output can be specified via standard input (also heredoc/herestring) with the `-`/`--stdin` option.
 
 ```bash
 @test 'assert_output() with pipe' {
@@ -298,16 +278,14 @@ heredoc/herestring) with the `-`/`--stdin` option.
 
 ### `refute_output`
 
-This function helps to verify that a command or function produces the
-correct output by checking that the specified unexpected output does not
-match the actual output. Matching can be literal (default), partial or
-regular expression. This function is the logical complement of
-`assert_output`.
+This function helps to verify that a command or function produces the correct output by checking that the specified unexpected output does not match the actual output.
+Matching can be literal (default), partial or regular expression.
+This function is the logical complement of `assert_output`.
 
 #### Literal matching
 
-By default, literal matching is performed. The assertion fails if
-`$output` equals the unexpected output.
+By default, literal matching is performed.
+The assertion fails if `$output` equals the unexpected output.
 
 ```bash
 @test 'refute_output()' {
@@ -324,8 +302,7 @@ output : want
 --
 ```
 
-If output is longer than one line it is displayed in *multi-line*
-format.
+If output is longer than one line it is displayed in *multi-line* format.
 
 #### Existence
 
@@ -348,9 +325,8 @@ expected no output, but output was non-empty
 
 #### Partial matching
 
-Partial matching can be enabled with the `--partial` option (`-p` for
-short). When used, the assertion fails if the unexpected *substring* is
-found in `$output`.
+Partial matching can be enabled with the `--partial` option (`-p` for short).
+When used, the assertion fails if the unexpected *substring* is found in `$output`.
 
 ```bash
 @test 'refute_output() partial matching' {
@@ -368,17 +344,15 @@ output    : ERROR: no such file or directory
 --
 ```
 
-This option and regular expression matching (`--regexp` or `-e`) are
-mutually exclusive. An error is displayed when used simultaneously.
+This option and regular expression matching (`--regexp` or `-e`) are mutually exclusive.
+An error is displayed when used simultaneously.
 
 #### Regular expression matching
 
-Regular expression matching can be enabled with the `--regexp` option
-(`-e` for short). When used, the assertion fails if the *extended
-regular expression* matches `$output`.
+Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
+When used, the assertion fails if the *extended regular expression* matches `$output`.
 
-*Note: The anchors `^` and `$` bind to the beginning and the end of the
-entire output (not individual lines), respectively.*
+*Note: The anchors `^` and `$` bind to the beginning and the end of the entire output (not individual lines), respectively.*
 
 ```bash
 @test 'refute_output() regular expression matching' {
@@ -396,16 +370,14 @@ output : Foobar v0.1.0
 --
 ```
 
-An error is displayed if the specified extended regular expression is
-invalid.
+An error is displayed if the specified extended regular expression is invalid.
 
-This option and partial matching (`--partial` or `-p`) are mutually
-exclusive. An error is displayed when used simultaneously.
+This option and partial matching (`--partial` or `-p`) are mutually exclusive.
+An error is displayed when used simultaneously.
 
 #### Standard Input, HereDocs and HereStrings
 
-The unexpected output can be specified via standard input (also
-heredoc/herestring) with the `-`/`--stdin` option.
+The unexpected output can be specified via standard input (also heredoc/herestring) with the `-`/`--stdin` option.
 
 ```bash
 @test 'refute_output() with pipe' {
@@ -422,22 +394,20 @@ heredoc/herestring) with the `-`/`--stdin` option.
 
 ### `assert_line`
 
-Similarly to `assert_output`, this function helps to verify that a
-command or function produces the correct output. It checks that the
-expected line appears in the output (default) or in a specific line of
-it. Matching can be literal (default), partial or regular expression.
+Similarly to `assert_output`, this function helps to verify that a command or function produces the correct output.
+It checks that the expected line appears in the output (default) or in a specific line of it.
+Matching can be literal (default), partial or regular expression.
 This function is the logical complement of `refute_line`.
 
-***Warning:*** *Due to a [bug in Bats][bats-93], empty lines are
-discarded from `${lines[@]}`, causing line indices to change and
-preventing testing for empty lines.*
+***Warning:***
+*Due to a [bug in Bats][bats-93], empty lines are discarded from `${lines[@]}`, causing line indices to change and preventing testing for empty lines.*
 
 [bats-93]: https://github.com/sstephenson/bats/pull/93
 
 #### Looking for a line in the output
 
-By default, the entire output is searched for the expected line. The
-assertion fails if the expected line is not found in `${lines[@]}`.
+By default, the entire output is searched for the expected line.
+The assertion fails if the expected line is not found in `${lines[@]}`.
 
 ```bash
 @test 'assert_line() looking for line' {
@@ -448,8 +418,9 @@ assertion fails if the expected line is not found in `${lines[@]}`.
 
 On failure, the expected line and the output are displayed.
 
-***Warning:*** *The output displayed does not contain empty lines. See
-the Warning above for more.*
+***Warning:***
+*The output displayed does not contain empty lines.
+See the Warning above for more.*
 
 ```
 -- output does not contain line --
@@ -461,15 +432,12 @@ output (3 lines):
 --
 ```
 
-If output is not longer than one line, it is displayed in *two-column*
-format.
+If output is not longer than one line, it is displayed in *two-column* format.
 
 #### Matching a specific line
 
-When the `--index <idx>` option is used (`-n <idx>` for short) , the
-expected line is matched only against the line identified by the given
-index. The assertion fails if the expected line does not equal
-`${lines[<idx>]}`.
+When the `--index <idx>` option is used (`-n <idx>` for short), the expected line is matched only against the line identified by the given index.
+The assertion fails if the expected line does not equal `${lines[<idx>]}`.
 
 ```bash
 @test 'assert_line() specific line' {
@@ -490,9 +458,8 @@ actual   : have-1
 
 #### Partial matching
 
-Partial matching can be enabled with the `--partial` option (`-p` for
-short). When used, a match fails if the expected *substring* is not
-found in the matched line.
+Partial matching can be enabled with the `--partial` option (`-p` for short).
+When used, a match fails if the expected *substring* is not found in the matched line.
 
 ```bash
 @test 'assert_line() partial matching' {
@@ -501,8 +468,7 @@ found in the matched line.
 }
 ```
 
-On failure, the same details are displayed as for literal matching,
-except that the substring replaces the expected line.
+On failure, the same details are displayed as for literal matching, except that the substring replaces the expected line.
 
 ```
 -- no output line contains substring --
@@ -514,17 +480,15 @@ output (3 lines):
 --
 ```
 
-This option and regular expression matching (`--regexp` or `-e`) are
-mutually exclusive. An error is displayed when used simultaneously.
+This option and regular expression matching (`--regexp` or `-e`) are mutually exclusive.
+An error is displayed when used simultaneously.
 
 #### Regular expression matching
 
-Regular expression matching can be enabled with the `--regexp` option
-(`-e` for short). When used, a match fails if the *extended regular
-expression* does not match the line being tested.
+Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
+When used, a match fails if the *extended regular expression* does not match the line being tested.
 
-*Note: As expected, the anchors `^` and `$` bind to the beginning and
-the end of the matched line, respectively.*
+*Note: As expected, the anchors `^` and `$` bind to the beginning and the end of the matched line, respectively.*
 
 ```bash
 @test 'assert_line() regular expression matching' {
@@ -533,8 +497,7 @@ the end of the matched line, respectively.*
 }
 ```
 
-On failure, the same details are displayed as for literal matching,
-except that the regular expression replaces the expected line.
+On failure, the same details are displayed as for literal matching, except that the regular expression replaces the expected line.
 
 ```
 -- regular expression does not match line --
@@ -544,31 +507,28 @@ line   : have-1
 --
 ```
 
-An error is displayed if the specified extended regular expression is
-invalid.
+An error is displayed if the specified extended regular expression is invalid.
 
-This option and partial matching (`--partial` or `-p`) are mutually
-exclusive. An error is displayed when used simultaneously.
+This option and partial matching (`--partial` or `-p`) are mutually exclusive.
+An error is displayed when used simultaneously.
 
 
 ### `refute_line`
 
-Similarly to `refute_output`, this function helps to verify that a
-command or function produces the correct output. It checks that the
-unexpected line does not appear in the output (default) or in a specific
-line of it. Matching can be literal (default), partial or regular
-expression. This function is the logical complement of `assert_line`.
+Similarly to `refute_output`, this function helps to verify that a command or function produces the correct output.
+It checks that the unexpected line does not appear in the output (default) or in a specific line of it.
+Matching can be literal (default), partial or regular expression.
+This function is the logical complement of `assert_line`.
 
-***Warning:*** *Due to a [bug in Bats][bats-93], empty lines are
-discarded from `${lines[@]}`, causing line indices to change and
-preventing testing for empty lines.*
+***Warning:***
+*Due to a [bug in Bats][bats-93], empty lines are discarded from `${lines[@]}`, causing line indices to change and preventing testing for empty lines.*
 
 [bats-93]: https://github.com/sstephenson/bats/pull/93
 
 #### Looking for a line in the output
 
-By default, the entire output is searched for the unexpected line. The
-assertion fails if the unexpected line is found in `${lines[@]}`.
+By default, the entire output is searched for the unexpected line.
+The assertion fails if the unexpected line is found in `${lines[@]}`.
 
 ```bash
 @test 'refute_line() looking for line' {
@@ -577,11 +537,11 @@ assertion fails if the unexpected line is found in `${lines[@]}`.
 }
 ```
 
-On failure, the unexpected line, the index of its first match and the
-output with the matching line highlighted are displayed.
+On failure, the unexpected line, the index of its first match and the output with the matching line highlighted are displayed.
 
-***Warning:*** *The output displayed does not contain empty lines. See
-the Warning above for more.*
+***Warning:***
+*The output displayed does not contain empty lines.
+See the Warning above for more.*
 
 ```
 -- line should not be in output --
@@ -594,15 +554,12 @@ output (3 lines):
 --
 ```
 
-If output is not longer than one line, it is displayed in *two-column*
-format.
+If output is not longer than one line, it is displayed in *two-column* format.
 
 #### Matching a specific line
 
-When the `--index <idx>` option is used (`-n <idx>` for short) , the
-unexpected line is matched only against the line identified by the given
-index. The assertion fails if the unexpected line equals
-`${lines[<idx>]}`.
+When the `--index <idx>` option is used (`-n <idx>` for short), the unexpected line is matched only against the line identified by the given index.
+The assertion fails if the unexpected line equals `${lines[<idx>]}`.
 
 ```bash
 @test 'refute_line() specific line' {
@@ -622,9 +579,8 @@ line  : want-1
 
 #### Partial matching
 
-Partial matching can be enabled with the `--partial` option (`-p` for
-short). When used, a match fails if the unexpected *substring* is found
-in the matched line.
+Partial matching can be enabled with the `--partial` option (`-p` for short).
+When used, a match fails if the unexpected *substring* is found in the matched line.
 
 ```bash
 @test 'refute_line() partial matching' {
@@ -633,9 +589,8 @@ in the matched line.
 }
 ```
 
-On failure, in addition to the details of literal matching, the
-substring is also displayed. When used with `--index <idx>` the
-substring replaces the unexpected line.
+On failure, in addition to the details of literal matching, the substring is also displayed.
+When used with `--index <idx>` the substring replaces the unexpected line.
 
 ```
 -- no line should contain substring --
@@ -648,17 +603,15 @@ output (3 lines):
 --
 ```
 
-This option and regular expression matching (`--regexp` or `-e`) are
-mutually exclusive. An error is displayed when used simultaneously.
+This option and regular expression matching (`--regexp` or `-e`) are mutually exclusive.
+An error is displayed when used simultaneously.
 
 #### Regular expression matching
 
-Regular expression matching can be enabled with the `--regexp` option
-(`-e` for short). When used, a match fails if the *extended regular
-expression* matches the line being tested.
+Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
+When used, a match fails if the *extended regular expression* matches the line being tested.
 
-*Note: As expected, the anchors `^` and `$` bind to the beginning and
-the end of the matched line, respectively.*
+*Note: As expected, the anchors `^` and `$` bind to the beginning and the end of the matched line, respectively.*
 
 ```bash
 @test 'refute_line() regular expression matching' {
@@ -667,9 +620,8 @@ the end of the matched line, respectively.*
 }
 ```
 
-On failure, in addition to the details of literal matching, the regular
-expression is also displayed. When used with `--index <idx>` the regular
-expression replaces the unexpected line.
+On failure, in addition to the details of literal matching, the regular expression is also displayed.
+When used with `--index <idx>` the regular expression replaces the unexpected line.
 
 ```
 -- regular expression should not match line --
@@ -679,18 +631,15 @@ line   : Foobar v0.1.0
 --
 ```
 
-An error is displayed if the specified extended regular expression is
-invalid.
+An error is displayed if the specified extended regular expression is invalid.
 
-This option and partial matching (`--partial` or `-p`) are mutually
-exclusive. An error is displayed when used simultaneously.
+This option and partial matching (`--partial` or `-p`) are mutually exclusive.
+An error is displayed when used simultaneously.
 
 
 ## Options
 
-For functions that have options, `--` disables option parsing for the
-remaining arguments to allow using arguments identical to one of the
-allowed options.
+For functions that have options, `--` disables option parsing for the remaining arguments to allow using arguments identical to one of the allowed options.
 
 ```bash
 assert_output -- '-p'
