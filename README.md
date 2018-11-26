@@ -1,8 +1,9 @@
 # bats-assert
 
-[![GitHub license](https://img.shields.io/badge/license-CC0-blue.svg)](https://raw.githubusercontent.com/ztombol/bats-assert/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/ztombol/bats-assert.svg)](https://github.com/ztombol/bats-assert/releases/latest)
-[![Build Status](https://travis-ci.org/ztombol/bats-assert.svg?branch=master)](https://travis-ci.org/ztombol/bats-assert)
+[![License](https://img.shields.io/npm/l/bats-assert.svg)](https://github.com/jasonkarns/bats-assert-1/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/jasonkarns/bats-assert-1.svg)](https://github.com/jasonkarns/bats-assert-1/releases)
+[![npm release](https://img.shields.io/npm/v/bats-assert.svg)](https://www.npmjs.com/package/bats-assert)
+[![Build Status](https://travis-ci.org/jasonkarns/bats-assert-1.svg?branch=master)](https://travis-ci.org/jasonkarns/bats-assert-1)
 
 `bats-assert` is a helper library providing common assertions for
 [Bats][bats].
