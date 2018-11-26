@@ -26,6 +26,11 @@
     "load.bash",
     "src"
   ],
+  "scripts": {
+    "postversion": "npm publish",
+    "prepublishOnly": "npm run publish:github",
+    "publish:github": "git push --follow-tags"
+  },
   "peerDependencies": {
     "bats-support": "git+https://github.com/ztombol/bats-support.git#v0.2.0"
   },
