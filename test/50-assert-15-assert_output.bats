@@ -26,6 +26,23 @@ load test_helper
   [ "${lines[3]}" == '--' ]
 }
 
+@test 'assert_output(): succeeds if output is non-empty' {
+  run echo 'a'
+  run assert_output
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 0 ]
+}
+
+@test 'assert_output(): fails if output is empty' {
+  run echo ''
+  run assert_output
+  [ "$status" -eq 1 ]
+  [ "${#lines[@]}" -eq 3 ]
+  [ "${lines[0]}" == '-- no output --' ]
+  [ "${lines[1]}" == 'expected non-empty output, but output was empty' ]
+  [ "${lines[2]}" == '--' ]
+}
+
 @test 'assert_output() - : reads <expected> from STDIN' {
   run echo 'a'
   run assert_output - <<STDIN
