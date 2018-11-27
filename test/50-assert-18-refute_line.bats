@@ -50,7 +50,7 @@ load test_helper
 @test 'refute_line() <unexpected>: performs literal matching by default' {
   run echo 'a'
   run refute_line '*'
-  [ "$status" -eq 0 ]
+  assert_quiet_exit
 }
 
 
@@ -219,7 +219,7 @@ test_n_index () {
 @test 'refute_line() --index <idx> <unexpected>: performs literal matching by default' {
   run printf 'a\nb\nc'
   run refute_line --index 1 '*'
-  [ "$status" -eq 0 ]
+  assert_quiet_exit
 }
 
 

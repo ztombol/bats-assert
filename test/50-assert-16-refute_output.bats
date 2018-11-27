@@ -59,7 +59,7 @@ INPUT
 @test 'refute_output() <unexpected>: performs literal matching by default' {
   run echo 'a'
   run refute_output '*'
-  [ "$status" -eq 0 ]
+  assert_quiet_exit
 }
 
 
