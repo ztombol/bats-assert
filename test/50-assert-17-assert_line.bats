@@ -51,7 +51,14 @@ ERR_MSG
 @test 'assert_line() <expected>: performs literal matching by default' {
   run echo 'a'
   run assert_line '*'
-  [ "$status" -eq 1 ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output does not contain line --
+line   : *
+output : a
+--
+ERR_MSG
 }
 
 
@@ -227,7 +234,15 @@ ERR_MSG
 @test 'assert_line() --index <idx> <expected>: performs literal matching by default' {
   run printf 'a\nb\nc'
   run assert_line --index 1 '*'
-  [ "$status" -eq 1 ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- line differs --
+index    : 1
+expected : *
+actual   : b
+--
+ERR_MSG
 }
 
 

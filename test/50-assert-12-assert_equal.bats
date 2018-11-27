@@ -51,5 +51,12 @@ ERR_MSG
 
 @test 'assert_equal() <actual> <expected>: performs literal matching' {
   run assert_equal 'a' '*'
-  [ "$status" -eq 1 ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- values do not equal --
+expected : *
+actual   : a
+--
+ERR_MSG
 }

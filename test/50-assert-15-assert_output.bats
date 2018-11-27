@@ -81,7 +81,14 @@ ERR_MSG
 @test 'assert_output() <expected>: performs literal matching by default' {
   run echo 'a'
   run assert_output '*'
-  [ "$status" -eq 1 ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output differs --
+expected : *
+actual   : a
+--
+ERR_MSG
 }
 
 
