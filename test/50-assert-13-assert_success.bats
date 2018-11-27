@@ -5,6 +5,7 @@ load test_helper
 @test "assert_success(): returns 0 if \`\$status' is 0" {
   run true
   run assert_success
+
   assert_test_pass
 }
 
@@ -12,24 +13,28 @@ load test_helper
   run bash -c 'echo "a"
                exit 1'
   run assert_success
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 4 ]
-  [ "${lines[0]}" == '-- command failed --' ]
-  [ "${lines[1]}" == 'status : 1' ]
-  [ "${lines[2]}" == 'output : a' ]
-  [ "${lines[3]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- command failed --
+status : 1
+output : a
+--
+ERR_MSG
 }
 
 @test "assert_success(): displays \`\$output' in multi-line format if it is longer than one line" {
   run bash -c 'printf "a 0\na 1"
                exit 1'
   run assert_success
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 6 ]
-  [ "${lines[0]}" == '-- command failed --' ]
-  [ "${lines[1]}" == 'status : 1' ]
-  [ "${lines[2]}" == 'output (2 lines):' ]
-  [ "${lines[3]}" == '  a 0' ]
-  [ "${lines[4]}" == '  a 1' ]
-  [ "${lines[5]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- command failed --
+status : 1
+output (2 lines):
+  a 0
+  a 1
+--
+ERR_MSG
 }

@@ -9,9 +9,10 @@ load test_helper
 
 @test 'refute() <expression>: returns 1 and displays <expression> if it evaluates to TRUE' {
   run refute true
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- assertion succeeded, but it was expected to fail --' ]
-  [ "${lines[1]}" == 'expression : true' ]
-  [ "${lines[2]}" == '--' ]
+  assert_test_fail <<'ERR_MSG'
+
+-- assertion succeeded, but it was expected to fail --
+expression : true
+--
+ERR_MSG
 }
