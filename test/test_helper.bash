@@ -8,7 +8,7 @@ setup() {
   # Load library.
   load '../load'
 
-  assert_quiet_exit() {
+  assert_test_pass() {
     test "$status" -eq 0
     test "${#lines[@]}" -eq 0
   }

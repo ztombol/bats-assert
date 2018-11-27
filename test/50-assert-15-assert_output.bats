@@ -10,7 +10,7 @@ load test_helper
 @test "assert_output() <expected>: returns 0 if <expected> equals \`\$output'" {
   run echo 'a'
   run assert_output 'a'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_output() <expected>: returns 1 and displays details if <expected> does not equal \`\$output'" {
@@ -29,7 +29,7 @@ load test_helper
   run assert_output - <<STDIN
 a
 STDIN
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_output() --stdin : reads <expected> from STDIN' {
@@ -37,7 +37,7 @@ STDIN
   run assert_output --stdin <<STDIN
 a
 STDIN
-  assert_quiet_exit
+  assert_test_pass
 }
 
 # Output formatting
@@ -84,20 +84,20 @@ STDIN
 @test 'assert_output() -p <partial>: enables partial matching' {
   run echo 'abc'
   run assert_output -p 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_output() --partial <partial>: enables partial matching' {
   run echo 'abc'
   run assert_output --partial 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 # Correctness
 @test "assert_output() --partial <partial>: returns 0 if <partial> is a substring in \`\$output'" {
   run printf 'a\nb\nc'
   run assert_output --partial 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_output() --partial <partial>: returns 1 and displays details if <partial> is not a substring in \`\$output'" {
@@ -148,20 +148,20 @@ STDIN
 @test 'assert_output() -e <regexp>: enables regular expression matching' {
   run echo 'abc'
   run assert_output -e '^a'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_output() --regexp <regexp>: enables regular expression matching' {
   run echo 'abc'
   run assert_output --regexp '^a'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 # Correctness
 @test "assert_output() --regexp <regexp>: returns 0 if <regexp> matches \`\$output'" {
   run printf 'a\nb\nc'
   run assert_output --regexp '.*b.*'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_output() --regexp <regexp>: returns 1 and displays details if <regexp> does not match \`\$output'" {
@@ -231,5 +231,5 @@ STDIN
 @test "assert_output(): \`--' stops parsing options" {
   run echo '-p'
   run assert_output -- '-p'
-  assert_quiet_exit
+  assert_test_pass
 }

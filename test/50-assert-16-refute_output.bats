@@ -11,7 +11,7 @@ load test_helper
 @test "refute_output() <unexpected>: returns 0 if <unexpected> does not equal \`\$output'" {
   run echo 'b'
   run refute_output 'a'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "refute_output() <unexpected>: returns 1 and displays details if <unexpected> equals \`\$output'" {
@@ -30,7 +30,7 @@ load test_helper
 b
 INPUT
 
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'refute_output() --stdin : reads <unexpected> from STDIN' {
@@ -39,7 +39,7 @@ INPUT
 b
 INPUT
 
-  assert_quiet_exit
+  assert_test_pass
 }
 
 # Output formatting
@@ -59,7 +59,7 @@ INPUT
 @test 'refute_output() <unexpected>: performs literal matching by default' {
   run echo 'a'
   run refute_output '*'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 
@@ -71,7 +71,7 @@ INPUT
 test_p_partial () {
   run echo 'abc'
   run refute_output "$1" 'd'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'refute_output() -p <partial>: enables partial matching' {
@@ -86,7 +86,7 @@ test_p_partial () {
 @test "refute_output() --partial <partial>: returns 0 if <partial> is not a substring in \`\$output'" {
   run printf 'a\nb\nc'
   run refute_output --partial 'd'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "refute_output() --partial <partial>: returns 1 and displays details if <partial> is a substring in \`\$output'" {
@@ -124,7 +124,7 @@ test_p_partial () {
 test_r_regexp () {
   run echo 'abc'
   run refute_output "$1" '^d'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'refute_output() -e <regexp>: enables regular expression matching' {
@@ -139,7 +139,7 @@ test_r_regexp () {
 @test "refute_output() --regexp <regexp>: returns 0 if <regexp> does not match \`\$output'" {
   run printf 'a\nb\nc'
   run refute_output --regexp '.*d.*'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "refute_output() --regexp <regexp>: returns 1 and displays details if <regexp> matches \`\$output'" {
@@ -195,5 +195,5 @@ test_r_regexp () {
 @test "refute_output(): \`--' stops parsing options" {
   run echo '--'
   run refute_output -- '-p'
-  assert_quiet_exit
+  assert_test_pass
 }

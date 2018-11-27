@@ -4,7 +4,7 @@ load test_helper
 
 @test 'assert_equal() <actual> <expected>: returns 0 if <actual> equals <expected>' {
   run assert_equal 'a' 'a'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_equal() <actual> <expected>: returns 1 and displays details if <actual> does not equal <expected>' {

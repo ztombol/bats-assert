@@ -15,7 +15,7 @@ load test_helper
 @test "assert_line() <expected>: returns 0 if <expected> is a line in \`\${lines[@]}'" {
   run printf 'a\nb\nc'
   run assert_line 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_line() <expected>: returns 1 and displays details if <expected> is not a line in \`\${lines[@]}'" {
@@ -59,7 +59,7 @@ load test_helper
 test_p_partial () {
   run printf 'a\n_b_\nc'
   run assert_line "$1" 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_line() -p <partial>: enables partial matching' {
@@ -74,7 +74,7 @@ test_p_partial () {
 @test "assert_line() --partial <partial>: returns 0 if <partial> is a substring in any line in \`\${lines[@]}'" {
   run printf 'a\n_b_\nc'
   run assert_line --partial 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_line() --partial <partial>: returns 1 and displays details if <partial> is not a substring in any lines in \`\${lines[@]}'" {
@@ -111,7 +111,7 @@ test_p_partial () {
 test_r_regexp () {
   run printf 'a\n_b_\nc'
   run assert_line "$1" '^.b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_line() -e <regexp>: enables regular expression matching' {
@@ -126,7 +126,7 @@ test_r_regexp () {
 @test "assert_line() --regexp <regexp>: returns 0 if <regexp> matches any line in \`\${lines[@]}'" {
   run printf 'a\n_b_\nc'
   run assert_line --regexp '^.b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_line() --regexp <regexp>: returns 1 and displays details if <regexp> does not match any lines in \`\${lines[@]}'" {
@@ -163,7 +163,7 @@ test_r_regexp () {
 test_n_index () {
   run printf 'a\nb\nc'
   run assert_line "$1" 1 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_line() -n <idx> <expected>: matches against the <idx>-th line only' {
@@ -192,7 +192,7 @@ test_n_index () {
 @test "assert_line() --index <idx> <expected>: returns 0 if <expected> equals \`\${lines[<idx>]}'" {
   run printf 'a\nb\nc'
   run assert_line --index 1 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_line() --index <idx> <expected>: returns 1 and displays details if <expected> does not equal \`\${lines[<idx>]}'" {
@@ -223,7 +223,7 @@ test_n_index () {
 test_index_p_partial () {
   run printf 'a\n_b_\nc'
   run assert_line --index 1 "$1" 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_line() --index <idx> -p <partial>: enables partial matching' {
@@ -238,7 +238,7 @@ test_index_p_partial () {
 @test "assert_line() --index <idx> --partial <partial>: returns 0 if <partial> is a substring in \`\${lines[<idx>]}'" {
   run printf 'a\n_b_\nc'
   run assert_line --index 1 --partial 'b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_line() --index <idx> --partial <partial>: returns 1 and displays details if <partial> is not a substring in \`\${lines[<idx>]}'" {
@@ -262,7 +262,7 @@ test_index_p_partial () {
 test_index_r_regexp () {
   run printf 'a\n_b_\nc'
   run assert_line --index 1 "$1" '^.b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert_line() --index <idx> -e <regexp>: enables regular expression matching' {
@@ -277,7 +277,7 @@ test_index_r_regexp () {
 @test "assert_line() --index <idx> --regexp <regexp>: returns 0 if <regexp> matches \`\${lines[<idx>]}'" {
   run printf 'a\n_b_\nc'
   run assert_line --index 1 --regexp '^.b'
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test "assert_line() --index <idx> --regexp <regexp>: returns 1 and displays details if <regexp> does not match \`\${lines[<idx>]}'" {
@@ -318,5 +318,5 @@ test_index_r_regexp () {
 @test "assert_line(): \`--' stops parsing options" {
   run printf 'a\n-p\nc'
   run assert_line -- '-p'
-  assert_quiet_exit
+  assert_test_pass
 }

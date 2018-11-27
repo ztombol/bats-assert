@@ -4,7 +4,7 @@ load test_helper
 
 @test 'assert() <expression>: returns 0 if <expression> evaluates to TRUE' {
   run assert true
-  assert_quiet_exit
+  assert_test_pass
 }
 
 @test 'assert() <expression>: returns 1 and displays <expression> if it evaluates to FALSE' {
