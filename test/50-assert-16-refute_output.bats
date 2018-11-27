@@ -72,18 +72,16 @@ ERR_MSG
 #
 
 # Options
-test_p_partial () {
+@test 'refute_output() -p <partial>: enables partial matching' {
   run echo 'abc'
-  run refute_output "$1" 'd'
+  run refute_output -p 'd'
   assert_test_pass
 }
 
-@test 'refute_output() -p <partial>: enables partial matching' {
-  test_p_partial -p
-}
-
 @test 'refute_output() --partial <partial>: enables partial matching' {
-  test_p_partial --partial
+  run echo 'abc'
+  run refute_output --partial 'd'
+  assert_test_pass
 }
 
 # Correctness
@@ -129,18 +127,16 @@ ERR_MSG
 #
 
 # Options
-test_r_regexp () {
+@test 'refute_output() -e <regexp>: enables regular expression matching' {
   run echo 'abc'
-  run refute_output "$1" '^d'
+  run refute_output -e '^d'
   assert_test_pass
 }
 
-@test 'refute_output() -e <regexp>: enables regular expression matching' {
-  test_r_regexp -e
-}
-
 @test 'refute_output() --regexp <regexp>: enables regular expression matching' {
-  test_r_regexp --regexp
+  run echo 'abc'
+  run refute_output --regexp '^d'
+  assert_test_pass
 }
 
 # Correctness

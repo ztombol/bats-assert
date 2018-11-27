@@ -63,18 +63,16 @@ ERR_MSG
 #
 
 # Options
-test_p_partial () {
+@test 'refute_line() -p <partial>: enables partial matching' {
   run printf 'a\nb\nc'
-  run refute_line "$1" 'd'
+  run refute_line -p 'd'
   assert_test_pass
 }
 
-@test 'refute_line() -p <partial>: enables partial matching' {
-  test_p_partial -p
-}
-
 @test 'refute_line() --partial <partial>: enables partial matching' {
-  test_p_partial --partial
+  run printf 'a\nb\nc'
+  run refute_line --partial 'd'
+  assert_test_pass
 }
 
 # Correctness
@@ -122,18 +120,16 @@ ERR_MSG
 #
 
 # Options
-test_r_regexp () {
+@test 'refute_line() -e <regexp>: enables regular expression matching' {
   run printf 'a\nb\nc'
-  run refute_line "$1" '^.d'
+  run refute_line -e '^.d'
   assert_test_pass
 }
 
-@test 'refute_line() -e <regexp>: enables regular expression matching' {
-  test_r_regexp -e
-}
-
 @test 'refute_line() --regexp <regexp>: enables regular expression matching' {
-  test_r_regexp --regexp
+  run printf 'a\nb\nc'
+  run refute_line --regexp '^.d'
+  assert_test_pass
 }
 
 # Correctness
@@ -181,18 +177,16 @@ ERR_MSG
 ###############################################################################
 
 # Options
-test_n_index () {
+@test 'refute_line() -n <idx> <expected>: matches against the <idx>-th line only' {
   run printf 'a\nb\nc'
-  run refute_line "$1" 1 'd'
+  run refute_line -n 1 'd'
   assert_test_pass
 }
 
-@test 'refute_line() -n <idx> <expected>: matches against the <idx>-th line only' {
-  test_n_index -n
-}
-
 @test 'refute_line() --index <idx> <expected>: matches against the <idx>-th line only' {
-  test_n_index --index
+  run printf 'a\nb\nc'
+  run refute_line --index 1 'd'
+  assert_test_pass
 }
 
 @test 'refute_line() --index <idx>: returns 1 and displays an error message if <idx> is not an integer' {
@@ -244,18 +238,16 @@ ERR_MSG
 #
 
 # Options
-test_index_p_partial () {
+@test 'refute_line() --index <idx> -p <partial>: enables partial matching' {
   run printf 'a\nb\nc'
-  run refute_line --index 1 "$1" 'd'
+  run refute_line --index 1 -p 'd'
   assert_test_pass
 }
 
-@test 'refute_line() --index <idx> -p <partial>: enables partial matching' {
-  test_index_p_partial -p
-}
-
 @test 'refute_line() --index <idx> --partial <partial>: enables partial matching' {
-  test_index_p_partial --partial
+  run printf 'a\nb\nc'
+  run refute_line --index 1 --partial 'd'
+  assert_test_pass
 }
 
 # Correctness
@@ -285,18 +277,16 @@ ERR_MSG
 #
 
 # Options
-test_index_r_regexp () {
+@test 'refute_line() --index <idx> -e <regexp>: enables regular expression matching' {
   run printf 'a\nb\nc'
-  run refute_line --index 1 "$1" '^.b'
+  run refute_line --index 1 -e '^.b'
   assert_test_pass
 }
 
-@test 'refute_line() --index <idx> -e <regexp>: enables regular expression matching' {
-  test_index_r_regexp -e
-}
-
 @test 'refute_line() --index <idx> --regexp <regexp>: enables regular expression matching' {
-  test_index_r_regexp --regexp
+  run printf 'a\nb\nc'
+  run refute_line --index 1 --regexp '^.b'
+  assert_test_pass
 }
 
 # Correctness
