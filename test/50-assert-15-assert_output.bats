@@ -2,11 +2,6 @@
 
 load test_helper
 
-assert_quiet_exit() {
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 #
 # Literal matching
 #
