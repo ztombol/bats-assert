@@ -15,8 +15,7 @@ load test_helper
 @test "refute_line() <unexpected>: returns 0 if <unexpected> is not a line in \`\${lines[@]}'" {
   run printf 'a\nb\nc'
   run refute_line 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "refute_line() <unexpected>: returns 1 and displays details if <unexpected> is not a line in \`\${lines[@]}'" {
@@ -63,8 +62,7 @@ load test_helper
 test_p_partial () {
   run printf 'a\nb\nc'
   run refute_line "$1" 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'refute_line() -p <partial>: enables partial matching' {
@@ -79,8 +77,7 @@ test_p_partial () {
 @test "refute_line() --partial <partial>: returns 0 if <partial> is not a substring in any line in \`\${lines[@]}'" {
   run printf 'a\nb\nc'
   run refute_line --partial 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "refute_line() --partial <partial>: returns 1 and displays details if <partial> is a substring in any line in \`\${lines[@]}'" {
@@ -120,8 +117,7 @@ test_p_partial () {
 test_r_regexp () {
   run printf 'a\nb\nc'
   run refute_line "$1" '^.d'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'refute_line() -e <regexp>: enables regular expression matching' {
@@ -136,8 +132,7 @@ test_r_regexp () {
 @test "refute_line() --regexp <regexp>: returns 0 if <regexp> does not match any line in \`\${lines[@]}'" {
   run printf 'a\nb\nc'
   run refute_line --regexp '.*d.*'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "refute_line() --regexp <regexp>: returns 1 and displays details if <regexp> matches any lines in \`\${lines[@]}'" {
@@ -177,8 +172,7 @@ test_r_regexp () {
 test_n_index () {
   run printf 'a\nb\nc'
   run refute_line "$1" 1 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'refute_line() -n <idx> <expected>: matches against the <idx>-th line only' {
@@ -207,8 +201,7 @@ test_n_index () {
 @test "refute_line() --index <idx> <unexpected>: returns 0 if <unexpected> does not equal \`\${lines[<idx>]}'" {
   run printf 'a\nb\nc'
   run refute_line --index 1 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "refute_line() --index <idx> <unexpected>: returns 1 and displays details if <unexpected> equals \`\${lines[<idx>]}'" {
@@ -238,8 +231,7 @@ test_n_index () {
 test_index_p_partial () {
   run printf 'a\nb\nc'
   run refute_line --index 1 "$1" 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'refute_line() --index <idx> -p <partial>: enables partial matching' {
@@ -254,8 +246,7 @@ test_index_p_partial () {
 @test "refute_line() --index <idx> --partial <partial>: returns 0 if <partial> is not a substring in \`\${lines[<idx>]}'" {
   run printf 'a\nabc\nc'
   run refute_line --index 1 --partial 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "refute_line() --index <idx> --partial <partial>: returns 1 and displays details if <partial> is a substring in \`\${lines[<idx>]}'" {
@@ -279,8 +270,7 @@ test_index_p_partial () {
 test_index_r_regexp () {
   run printf 'a\nb\nc'
   run refute_line --index 1 "$1" '^.b'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'refute_line() --index <idx> -e <regexp>: enables regular expression matching' {
@@ -295,8 +285,7 @@ test_index_r_regexp () {
 @test "refute_line() --index <idx> --regexp <regexp>: returns 0 if <regexp> does not match \`\${lines[<idx>]}'" {
   run printf 'a\nabc\nc'
   run refute_line --index 1 --regexp '.*d.*'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "refute_line() --index <idx> --regexp <regexp>: returns 1 and displays details if <regexp> matches \`\${lines[<idx>]}'" {
@@ -337,6 +326,5 @@ test_index_r_regexp () {
 @test "refute_line(): \`--' stops parsing options" {
   run printf 'a\n--\nc'
   run refute_line -- '-p'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }

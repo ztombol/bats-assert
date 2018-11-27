@@ -5,8 +5,7 @@ load test_helper
 @test "assert_success(): returns 0 if \`\$status' is 0" {
   run true
   run assert_success
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "assert_success(): returns 1 and displays details if \`\$status' is not 0" {

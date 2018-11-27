@@ -4,8 +4,7 @@ load test_helper
 
 @test 'refute() <expression>: returns 0 if <expression> evaluates to FALSE' {
   run refute false
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'refute() <expression>: returns 1 and displays <expression> if it evaluates to TRUE' {

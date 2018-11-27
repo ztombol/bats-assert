@@ -5,8 +5,7 @@ load test_helper
 @test "assert_failure(): returns 0 if \`\$status' is not 0" {
   run false
   run assert_failure
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "assert_failure(): returns 1 and displays details if \`\$status' is 0" {
@@ -36,8 +35,7 @@ load test_helper
 @test "assert_failure() <status>: returns 0 if \`\$status' equals <status>" {
   run bash -c 'exit 1'
   run assert_failure 1
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test "assert_failure() <status>: returns 1 and displays details if \`\$status' does not equal <status>" {

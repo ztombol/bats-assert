@@ -4,8 +4,7 @@ load test_helper
 
 @test 'assert() <expression>: returns 0 if <expression> evaluates to TRUE' {
   run assert true
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'assert() <expression>: returns 1 and displays <expression> if it evaluates to FALSE' {

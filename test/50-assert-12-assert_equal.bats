@@ -4,8 +4,7 @@ load test_helper
 
 @test 'assert_equal() <actual> <expected>: returns 0 if <actual> equals <expected>' {
   run assert_equal 'a' 'a'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_quiet_exit
 }
 
 @test 'assert_equal() <actual> <expected>: returns 1 and displays details if <actual> does not equal <expected>' {
