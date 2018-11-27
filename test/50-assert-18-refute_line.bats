@@ -15,43 +15,46 @@ load test_helper
 @test "refute_line() <unexpected>: returns 0 if <unexpected> is not a line in \`\${lines[@]}'" {
   run printf 'a\nb\nc'
   run refute_line 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "refute_line() <unexpected>: returns 1 and displays details if <unexpected> is not a line in \`\${lines[@]}'" {
   run echo 'a'
   run refute_line 'a'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 5 ]
-  [ "${lines[0]}" == '-- line should not be in output --' ]
-  [ "${lines[1]}" == 'line   : a' ]
-  [ "${lines[2]}" == 'index  : 0' ]
-  [ "${lines[3]}" == 'output : a' ]
-  [ "${lines[4]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- line should not be in output --
+line   : a
+index  : 0
+output : a
+--
+ERR_MSG
 }
 
 # Output formatting
 @test "refute_line() <unexpected>: displays \`\$output' in multi-line format if it is longer than one line" {
   run printf 'a 0\na 1\na 2'
   run refute_line 'a 1'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 8 ]
-  [ "${lines[0]}" == '-- line should not be in output --' ]
-  [ "${lines[1]}" == 'line  : a 1' ]
-  [ "${lines[2]}" == 'index : 1' ]
-  [ "${lines[3]}" == 'output (3 lines):' ]
-  [ "${lines[4]}" == '  a 0' ]
-  [ "${lines[5]}" == '> a 1' ]
-  [ "${lines[6]}" == '  a 2' ]
-  [ "${lines[7]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- line should not be in output --
+line  : a 1
+index : 1
+output (3 lines):
+  a 0
+> a 1
+  a 2
+--
+ERR_MSG
 }
 
 # Options
 @test 'refute_line() <unexpected>: performs literal matching by default' {
   run echo 'a'
   run refute_line '*'
-  [ "$status" -eq 0 ]
+  assert_test_pass
 }
 
 
@@ -60,55 +63,55 @@ load test_helper
 #
 
 # Options
-test_p_partial () {
-  run printf 'a\nb\nc'
-  run refute_line "$1" 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'refute_line() -p <partial>: enables partial matching' {
-  test_p_partial -p
+  run printf 'a\nb\nc'
+  run refute_line -p 'd'
+  assert_test_pass
 }
 
 @test 'refute_line() --partial <partial>: enables partial matching' {
-  test_p_partial --partial
+  run printf 'a\nb\nc'
+  run refute_line --partial 'd'
+  assert_test_pass
 }
 
 # Correctness
 @test "refute_line() --partial <partial>: returns 0 if <partial> is not a substring in any line in \`\${lines[@]}'" {
   run printf 'a\nb\nc'
   run refute_line --partial 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "refute_line() --partial <partial>: returns 1 and displays details if <partial> is a substring in any line in \`\${lines[@]}'" {
   run echo 'a'
   run refute_line --partial 'a'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 5 ]
-  [ "${lines[0]}" == '-- no line should contain substring --' ]
-  [ "${lines[1]}" == 'substring : a' ]
-  [ "${lines[2]}" == 'index     : 0' ]
-  [ "${lines[3]}" == 'output    : a' ]
-  [ "${lines[4]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- no line should contain substring --
+substring : a
+index     : 0
+output    : a
+--
+ERR_MSG
 }
 
 # Output formatting
 @test "refute_line() --partial <partial>: displays \`\$output' in multi-line format if it is longer than one line" {
   run printf 'a\nabc\nc'
   run refute_line --partial 'b'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 8 ]
-  [ "${lines[0]}" == '-- no line should contain substring --' ]
-  [ "${lines[1]}" == 'substring : b' ]
-  [ "${lines[2]}" == 'index     : 1' ]
-  [ "${lines[3]}" == 'output (3 lines):' ]
-  [ "${lines[4]}" == '  a' ]
-  [ "${lines[5]}" == '> abc' ]
-  [ "${lines[6]}" == '  c' ]
-  [ "${lines[7]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- no line should contain substring --
+substring : b
+index     : 1
+output (3 lines):
+  a
+> abc
+  c
+--
+ERR_MSG
 }
 
 
@@ -117,55 +120,55 @@ test_p_partial () {
 #
 
 # Options
-test_r_regexp () {
-  run printf 'a\nb\nc'
-  run refute_line "$1" '^.d'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'refute_line() -e <regexp>: enables regular expression matching' {
-  test_r_regexp -e
+  run printf 'a\nb\nc'
+  run refute_line -e '^.d'
+  assert_test_pass
 }
 
 @test 'refute_line() --regexp <regexp>: enables regular expression matching' {
-  test_r_regexp --regexp
+  run printf 'a\nb\nc'
+  run refute_line --regexp '^.d'
+  assert_test_pass
 }
 
 # Correctness
 @test "refute_line() --regexp <regexp>: returns 0 if <regexp> does not match any line in \`\${lines[@]}'" {
   run printf 'a\nb\nc'
   run refute_line --regexp '.*d.*'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "refute_line() --regexp <regexp>: returns 1 and displays details if <regexp> matches any lines in \`\${lines[@]}'" {
   run echo 'a'
   run refute_line --regexp '.*a.*'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 5 ]
-  [ "${lines[0]}" == '-- no line should match the regular expression --' ]
-  [ "${lines[1]}" == 'regexp : .*a.*' ]
-  [ "${lines[2]}" == 'index  : 0' ]
-  [ "${lines[3]}" == 'output : a' ]
-  [ "${lines[4]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- no line should match the regular expression --
+regexp : .*a.*
+index  : 0
+output : a
+--
+ERR_MSG
 }
 
 # Output formatting
 @test "refute_line() --regexp <regexp>: displays \`\$output' in multi-line format if longer than one line" {
   run printf 'a\nabc\nc'
   run refute_line --regexp '.*b.*'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 8 ]
-  [ "${lines[0]}" == '-- no line should match the regular expression --' ]
-  [ "${lines[1]}" == 'regexp : .*b.*' ]
-  [ "${lines[2]}" == 'index  : 1' ]
-  [ "${lines[3]}" == 'output (3 lines):' ]
-  [ "${lines[4]}" == '  a' ]
-  [ "${lines[5]}" == '> abc' ]
-  [ "${lines[6]}" == '  c' ]
-  [ "${lines[7]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- no line should match the regular expression --
+regexp : .*b.*
+index  : 1
+output (3 lines):
+  a
+> abc
+  c
+--
+ERR_MSG
 }
 
 
@@ -174,28 +177,27 @@ test_r_regexp () {
 ###############################################################################
 
 # Options
-test_n_index () {
-  run printf 'a\nb\nc'
-  run refute_line "$1" 1 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'refute_line() -n <idx> <expected>: matches against the <idx>-th line only' {
-  test_n_index -n
+  run printf 'a\nb\nc'
+  run refute_line -n 1 'd'
+  assert_test_pass
 }
 
 @test 'refute_line() --index <idx> <expected>: matches against the <idx>-th line only' {
-  test_n_index --index
+  run printf 'a\nb\nc'
+  run refute_line --index 1 'd'
+  assert_test_pass
 }
 
 @test 'refute_line() --index <idx>: returns 1 and displays an error message if <idx> is not an integer' {
   run refute_line --index 1a
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- ERROR: refute_line --' ]
-  [ "${lines[1]}" == "\`--index' requires an integer argument: \`1a'" ]
-  [ "${lines[2]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- ERROR: refute_line --
+`--index' requires an integer argument: `1a'
+--
+ERR_MSG
 }
 
 
@@ -207,26 +209,27 @@ test_n_index () {
 @test "refute_line() --index <idx> <unexpected>: returns 0 if <unexpected> does not equal \`\${lines[<idx>]}'" {
   run printf 'a\nb\nc'
   run refute_line --index 1 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "refute_line() --index <idx> <unexpected>: returns 1 and displays details if <unexpected> equals \`\${lines[<idx>]}'" {
   run printf 'a\nb\nc'
   run refute_line --index 1 'b'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 4 ]
-  [ "${lines[0]}" == '-- line should differ --' ]
-  [ "${lines[1]}" == 'index : 1' ]
-  [ "${lines[2]}" == 'line  : b' ]
-  [ "${lines[3]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- line should differ --
+index : 1
+line  : b
+--
+ERR_MSG
 }
 
 # Options
 @test 'refute_line() --index <idx> <unexpected>: performs literal matching by default' {
   run printf 'a\nb\nc'
   run refute_line --index 1 '*'
-  [ "$status" -eq 0 ]
+  assert_test_pass
 }
 
 
@@ -235,39 +238,37 @@ test_n_index () {
 #
 
 # Options
-test_index_p_partial () {
-  run printf 'a\nb\nc'
-  run refute_line --index 1 "$1" 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'refute_line() --index <idx> -p <partial>: enables partial matching' {
-  test_index_p_partial -p
+  run printf 'a\nb\nc'
+  run refute_line --index 1 -p 'd'
+  assert_test_pass
 }
 
 @test 'refute_line() --index <idx> --partial <partial>: enables partial matching' {
-  test_index_p_partial --partial
+  run printf 'a\nb\nc'
+  run refute_line --index 1 --partial 'd'
+  assert_test_pass
 }
 
 # Correctness
 @test "refute_line() --index <idx> --partial <partial>: returns 0 if <partial> is not a substring in \`\${lines[<idx>]}'" {
   run printf 'a\nabc\nc'
   run refute_line --index 1 --partial 'd'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "refute_line() --index <idx> --partial <partial>: returns 1 and displays details if <partial> is a substring in \`\${lines[<idx>]}'" {
   run printf 'a\nabc\nc'
   run refute_line --index 1 --partial 'b'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 5 ]
-  [ "${lines[0]}" == '-- line should not contain substring --' ]
-  [ "${lines[1]}" == 'index     : 1' ]
-  [ "${lines[2]}" == 'substring : b' ]
-  [ "${lines[3]}" == 'line      : abc' ]
-  [ "${lines[4]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- line should not contain substring --
+index     : 1
+substring : b
+line      : abc
+--
+ERR_MSG
 }
 
 
@@ -276,39 +277,37 @@ test_index_p_partial () {
 #
 
 # Options
-test_index_r_regexp () {
-  run printf 'a\nb\nc'
-  run refute_line --index 1 "$1" '^.b'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'refute_line() --index <idx> -e <regexp>: enables regular expression matching' {
-  test_index_r_regexp -e
+  run printf 'a\nb\nc'
+  run refute_line --index 1 -e '^.b'
+  assert_test_pass
 }
 
 @test 'refute_line() --index <idx> --regexp <regexp>: enables regular expression matching' {
-  test_index_r_regexp --regexp
+  run printf 'a\nb\nc'
+  run refute_line --index 1 --regexp '^.b'
+  assert_test_pass
 }
 
 # Correctness
 @test "refute_line() --index <idx> --regexp <regexp>: returns 0 if <regexp> does not match \`\${lines[<idx>]}'" {
   run printf 'a\nabc\nc'
   run refute_line --index 1 --regexp '.*d.*'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "refute_line() --index <idx> --regexp <regexp>: returns 1 and displays details if <regexp> matches \`\${lines[<idx>]}'" {
   run printf 'a\nabc\nc'
   run refute_line --index 1 --regexp '.*b.*'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 5 ]
-  [ "${lines[0]}" == '-- regular expression should not match line --' ]
-  [ "${lines[1]}" == 'index  : 1' ]
-  [ "${lines[2]}" == 'regexp : .*b.*' ]
-  [ "${lines[3]}" == 'line   : abc' ]
-  [ "${lines[4]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- regular expression should not match line --
+index  : 1
+regexp : .*b.*
+line   : abc
+--
+ERR_MSG
 }
 
 
@@ -318,25 +317,28 @@ test_index_r_regexp () {
 
 @test "refute_line(): \`--partial' and \`--regexp' are mutually exclusive" {
   run refute_line --partial --regexp
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- ERROR: refute_line --' ]
-  [ "${lines[1]}" == "\`--partial' and \`--regexp' are mutually exclusive" ]
-  [ "${lines[2]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- ERROR: refute_line --
+`--partial' and `--regexp' are mutually exclusive
+--
+ERR_MSG
 }
 
 @test 'refute_line() --regexp <regexp>: returns 1 and displays an error message if <regexp> is not a valid extended regular expression' {
   run refute_line --regexp '[.*'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- ERROR: refute_line --' ]
-  [ "${lines[1]}" == "Invalid extended regular expression: \`[.*'" ]
-  [ "${lines[2]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- ERROR: refute_line --
+Invalid extended regular expression: `[.*'
+--
+ERR_MSG
 }
 
 @test "refute_line(): \`--' stops parsing options" {
   run printf 'a\n--\nc'
   run refute_line -- '-p'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }

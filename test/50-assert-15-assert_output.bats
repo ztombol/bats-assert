@@ -2,7 +2,6 @@
 
 load test_helper
 
-
 #
 # Literal matching
 #
@@ -11,36 +10,39 @@ load test_helper
 @test "assert_output() <expected>: returns 0 if <expected> equals \`\$output'" {
   run echo 'a'
   run assert_output 'a'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "assert_output() <expected>: returns 1 and displays details if <expected> does not equal \`\$output'" {
   run echo 'b'
   run assert_output 'a'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 4 ]
-  [ "${lines[0]}" == '-- output differs --' ]
-  [ "${lines[1]}" == 'expected : a' ]
-  [ "${lines[2]}" == 'actual   : b' ]
-  [ "${lines[3]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output differs --
+expected : a
+actual   : b
+--
+ERR_MSG
 }
 
 @test 'assert_output(): succeeds if output is non-empty' {
   run echo 'a'
   run assert_output
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+
+  assert_test_pass
 }
 
 @test 'assert_output(): fails if output is empty' {
   run echo ''
   run assert_output
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- no output --' ]
-  [ "${lines[1]}" == 'expected non-empty output, but output was empty' ]
-  [ "${lines[2]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- no output --
+expected non-empty output, but output was empty
+--
+ERR_MSG
 }
 
 @test 'assert_output() - : reads <expected> from STDIN' {
@@ -48,8 +50,8 @@ load test_helper
   run assert_output - <<STDIN
 a
 STDIN
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+
+  assert_test_pass
 }
 
 @test 'assert_output() --stdin : reads <expected> from STDIN' {
@@ -57,44 +59,55 @@ STDIN
   run assert_output --stdin <<STDIN
 a
 STDIN
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+
+  assert_test_pass
 }
 
 # Output formatting
 @test "assert_output() <expected>: displays details in multi-line format if \`\$output' is longer than one line" {
   run printf 'b 0\nb 1'
   run assert_output 'a'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 7 ]
-  [ "${lines[0]}" == '-- output differs --' ]
-  [ "${lines[1]}" == 'expected (1 lines):' ]
-  [ "${lines[2]}" == '  a' ]
-  [ "${lines[3]}" == 'actual (2 lines):' ]
-  [ "${lines[4]}" == '  b 0' ]
-  [ "${lines[5]}" == '  b 1' ]
-  [ "${lines[6]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output differs --
+expected (1 lines):
+  a
+actual (2 lines):
+  b 0
+  b 1
+--
+ERR_MSG
 }
 
 @test 'assert_output() <expected>: displays details in multi-line format if <expected> is longer than one line' {
   run echo 'b'
   run assert_output $'a 0\na 1'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 7 ]
-  [ "${lines[0]}" == '-- output differs --' ]
-  [ "${lines[1]}" == 'expected (2 lines):' ]
-  [ "${lines[2]}" == '  a 0' ]
-  [ "${lines[3]}" == '  a 1' ]
-  [ "${lines[4]}" == 'actual (1 lines):' ]
-  [ "${lines[5]}" == '  b' ]
-  [ "${lines[6]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output differs --
+expected (2 lines):
+  a 0
+  a 1
+actual (1 lines):
+  b
+--
+ERR_MSG
 }
 
 # Options
 @test 'assert_output() <expected>: performs literal matching by default' {
   run echo 'a'
   run assert_output '*'
-  [ "$status" -eq 1 ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output differs --
+expected : *
+actual   : a
+--
+ERR_MSG
 }
 
 
@@ -102,68 +115,69 @@ STDIN
 # Partial matching: `-p' and `--partial'
 #
 
-# Options
-test_p_partial () {
-  run echo 'abc'
-  run assert_output "$1" 'b'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'assert_output() -p <partial>: enables partial matching' {
-  test_p_partial -p
+  run echo 'abc'
+  run assert_output -p 'b'
+  assert_test_pass
 }
 
 @test 'assert_output() --partial <partial>: enables partial matching' {
-  test_p_partial --partial
+  run echo 'abc'
+  run assert_output --partial 'b'
+  assert_test_pass
 }
 
 # Correctness
 @test "assert_output() --partial <partial>: returns 0 if <partial> is a substring in \`\$output'" {
   run printf 'a\nb\nc'
   run assert_output --partial 'b'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "assert_output() --partial <partial>: returns 1 and displays details if <partial> is not a substring in \`\$output'" {
   run echo 'b'
   run assert_output --partial 'a'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 4 ]
-  [ "${lines[0]}" == '-- output does not contain substring --' ]
-  [ "${lines[1]}" == 'substring : a' ]
-  [ "${lines[2]}" == 'output    : b' ]
-  [ "${lines[3]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output does not contain substring --
+substring : a
+output    : b
+--
+ERR_MSG
 }
 
 # Output formatting
 @test "assert_output() --partial <partial>: displays details in multi-line format if \`\$output' is longer than one line" {
   run printf 'b 0\nb 1'
   run assert_output --partial 'a'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 7 ]
-  [ "${lines[0]}" == '-- output does not contain substring --' ]
-  [ "${lines[1]}" == 'substring (1 lines):' ]
-  [ "${lines[2]}" == '  a' ]
-  [ "${lines[3]}" == 'output (2 lines):' ]
-  [ "${lines[4]}" == '  b 0' ]
-  [ "${lines[5]}" == '  b 1' ]
-  [ "${lines[6]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output does not contain substring --
+substring (1 lines):
+  a
+output (2 lines):
+  b 0
+  b 1
+--
+ERR_MSG
 }
 
 @test 'assert_output() --partial <partial>: displays details in multi-line format if <partial> is longer than one line' {
   run echo 'b'
   run assert_output --partial $'a 0\na 1'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 7 ]
-  [ "${lines[0]}" == '-- output does not contain substring --' ]
-  [ "${lines[1]}" == 'substring (2 lines):' ]
-  [ "${lines[2]}" == '  a 0' ]
-  [ "${lines[3]}" == '  a 1' ]
-  [ "${lines[4]}" == 'output (1 lines):' ]
-  [ "${lines[5]}" == '  b' ]
-  [ "${lines[6]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- output does not contain substring --
+substring (2 lines):
+  a 0
+  a 1
+output (1 lines):
+  b
+--
+ERR_MSG
 }
 
 
@@ -171,78 +185,81 @@ test_p_partial () {
 # Regular expression matching: `-e' and `--regexp'
 #
 
-# Options
-test_r_regexp () {
-  run echo 'abc'
-  run assert_output "$1" '^a'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
-}
-
 @test 'assert_output() -e <regexp>: enables regular expression matching' {
-  test_r_regexp -e
+  run echo 'abc'
+  run assert_output -e '^a'
+  assert_test_pass
 }
 
 @test 'assert_output() --regexp <regexp>: enables regular expression matching' {
-  test_r_regexp --regexp
+  run echo 'abc'
+  run assert_output --regexp '^a'
+  assert_test_pass
 }
 
 # Correctness
 @test "assert_output() --regexp <regexp>: returns 0 if <regexp> matches \`\$output'" {
   run printf 'a\nb\nc'
   run assert_output --regexp '.*b.*'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
 
 @test "assert_output() --regexp <regexp>: returns 1 and displays details if <regexp> does not match \`\$output'" {
   run echo 'b'
   run assert_output --regexp '.*a.*'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 4 ]
-  [ "${lines[0]}" == '-- regular expression does not match output --' ]
-  [ "${lines[1]}" == 'regexp : .*a.*' ]
-  [ "${lines[2]}" == 'output : b' ]
-  [ "${lines[3]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- regular expression does not match output --
+regexp : .*a.*
+output : b
+--
+ERR_MSG
 }
 
 # Output formatting
 @test "assert_output() --regexp <regexp>: displays details in multi-line format if \`\$output' is longer than one line" {
   run printf 'b 0\nb 1'
   run assert_output --regexp '.*a.*'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 7 ]
-  [ "${lines[0]}" == '-- regular expression does not match output --' ]
-  [ "${lines[1]}" == 'regexp (1 lines):' ]
-  [ "${lines[2]}" == '  .*a.*' ]
-  [ "${lines[3]}" == 'output (2 lines):' ]
-  [ "${lines[4]}" == '  b 0' ]
-  [ "${lines[5]}" == '  b 1' ]
-  [ "${lines[6]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- regular expression does not match output --
+regexp (1 lines):
+  .*a.*
+output (2 lines):
+  b 0
+  b 1
+--
+ERR_MSG
 }
 
 @test 'assert_output() --regexp <regexp>: displays details in multi-line format if <regexp> is longer than one line' {
   run echo 'b'
   run assert_output --regexp $'.*a\nb.*'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 7 ]
-  [ "${lines[0]}" == '-- regular expression does not match output --' ]
-  [ "${lines[1]}" == 'regexp (2 lines):' ]
-  [ "${lines[2]}" == '  .*a' ]
-  [ "${lines[3]}" == '  b.*' ]
-  [ "${lines[4]}" == 'output (1 lines):' ]
-  [ "${lines[5]}" == '  b' ]
-  [ "${lines[6]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- regular expression does not match output --
+regexp (2 lines):
+  .*a
+  b.*
+output (1 lines):
+  b
+--
+ERR_MSG
 }
 
 # Error handling
 @test 'assert_output() --regexp <regexp>: returns 1 and displays an error message if <regexp> is not a valid extended regular expression' {
   run assert_output --regexp '[.*'
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- ERROR: assert_output --' ]
-  [ "${lines[1]}" == "Invalid extended regular expression: \`[.*'" ]
-  [ "${lines[2]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- ERROR: assert_output --
+Invalid extended regular expression: `[.*'
+--
+ERR_MSG
 }
 
 
@@ -252,16 +269,17 @@ test_r_regexp () {
 
 @test "assert_output(): \`--partial' and \`--regexp' are mutually exclusive" {
   run assert_output --partial --regexp
-  [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- ERROR: assert_output --' ]
-  [ "${lines[1]}" == "\`--partial' and \`--regexp' are mutually exclusive" ]
-  [ "${lines[2]}" == '--' ]
+
+  assert_test_fail <<'ERR_MSG'
+
+-- ERROR: assert_output --
+`--partial' and `--regexp' are mutually exclusive
+--
+ERR_MSG
 }
 
 @test "assert_output(): \`--' stops parsing options" {
   run echo '-p'
   run assert_output -- '-p'
-  [ "$status" -eq 0 ]
-  [ "${#lines[@]}" -eq 0 ]
+  assert_test_pass
 }
