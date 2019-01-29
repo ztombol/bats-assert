@@ -12,6 +12,9 @@
 # Outputs:
 #   STDERR - details, on failure
 assert_success() {
+  : "${output?}"
+  : "${status?}"
+
   if (( status != 0 )); then
     { local -ir width=6
       batslib_print_kv_single "$width" 'status' "$status"

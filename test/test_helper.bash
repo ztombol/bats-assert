@@ -18,7 +18,8 @@ assert_test_pass() {
 
 assert_test_fail() {
   local err_msg="${1-$(cat -)}"
-  local num_lines="$(printf '%s' "$err_msg" | wc -l)"
+  local num_lines
+  num_lines="$(printf '%s' "$err_msg" | wc -l)"
 
   test "$status" -eq 1
   test "${#lines[@]}" -eq "$num_lines"
