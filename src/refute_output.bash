@@ -46,18 +46,18 @@ refute_output() {
 
   while (( $# > 0 )); do
     case "$1" in
-      -p|--partial) is_mode_partial=1; shift ;;
-      -e|--regexp) is_mode_regexp=1; shift ;;
-      -|--stdin) use_stdin=1; shift ;;
-      --) shift; break ;;
-      *) break ;;
+    -p|--partial) is_mode_partial=1; shift ;;
+    -e|--regexp) is_mode_regexp=1; shift ;;
+    -|--stdin) use_stdin=1; shift ;;
+    --) shift; break ;;
+    *) break ;;
     esac
   done
 
   if (( is_mode_partial )) && (( is_mode_regexp )); then
     echo "\`--partial' and \`--regexp' are mutually exclusive" \
-      | batslib_decorate 'ERROR: refute_output' \
-      | fail
+    | batslib_decorate 'ERROR: refute_output' \
+    | fail
     return $?
   fi
 
@@ -71,8 +71,8 @@ refute_output() {
 
   if (( is_mode_regexp == 1 )) && [[ '' =~ $unexpected ]] || (( $? == 2 )); then
     echo "Invalid extended regular expression: \`$unexpected'" \
-      | batslib_decorate 'ERROR: refute_output' \
-      | fail
+    | batslib_decorate 'ERROR: refute_output' \
+    | fail
     return $?
   fi
 
@@ -80,32 +80,32 @@ refute_output() {
   if (( is_mode_empty )); then
     if [ -n "$output" ]; then
       batslib_print_kv_single_or_multi 6 \
-          'output' "$output" \
-        | batslib_decorate 'output non-empty, but expected no output' \
-        | fail
+      'output' "$output" \
+      | batslib_decorate 'output non-empty, but expected no output' \
+      | fail
     fi
   elif (( is_mode_regexp )); then
     if [[ $output =~ $unexpected ]] || (( $? == 0 )); then
       batslib_print_kv_single_or_multi 6 \
-          'regexp'  "$unexpected" \
-          'output' "$output" \
-        | batslib_decorate 'regular expression should not match output' \
-        | fail
+      'regexp'  "$unexpected" \
+      'output' "$output" \
+      | batslib_decorate 'regular expression should not match output' \
+      | fail
     fi
   elif (( is_mode_partial )); then
     if [[ $output == *"$unexpected"* ]]; then
       batslib_print_kv_single_or_multi 9 \
-          'substring' "$unexpected" \
-          'output'    "$output" \
-        | batslib_decorate 'output should not contain substring' \
-        | fail
+      'substring' "$unexpected" \
+      'output'    "$output" \
+      | batslib_decorate 'output should not contain substring' \
+      | fail
     fi
   else
     if [[ $output == "$unexpected" ]]; then
       batslib_print_kv_single_or_multi 6 \
-          'output' "$output" \
-        | batslib_decorate 'output equals, but it was expected to differ' \
-        | fail
+      'output' "$output" \
+      | batslib_decorate 'output equals, but it was expected to differ' \
+      | fail
     fi
   fi
 }

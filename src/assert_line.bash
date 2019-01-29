@@ -51,28 +51,28 @@ assert_line() {
   # Handle options.
   while (( $# > 0 )); do
     case "$1" in
-      -n|--index)
-        if (( $# < 2 )) || ! [[ $2 =~ ^([0-9]|[1-9][0-9]+)$ ]]; then
-          echo "\`--index' requires an integer argument: \`$2'" \
-            | batslib_decorate 'ERROR: assert_line' \
-            | fail
-          return $?
-        fi
-        is_match_line=1
-        local -ri idx="$2"
-        shift 2
-        ;;
-      -p|--partial) is_mode_partial=1; shift ;;
-      -e|--regexp) is_mode_regexp=1; shift ;;
-      --) shift; break ;;
-      *) break ;;
+    -n|--index)
+      if (( $# < 2 )) || ! [[ $2 =~ ^([0-9]|[1-9][0-9]+)$ ]]; then
+        echo "\`--index' requires an integer argument: \`$2'" \
+        | batslib_decorate 'ERROR: assert_line' \
+        | fail
+        return $?
+      fi
+      is_match_line=1
+      local -ri idx="$2"
+      shift 2
+      ;;
+    -p|--partial) is_mode_partial=1; shift ;;
+    -e|--regexp) is_mode_regexp=1; shift ;;
+    --) shift; break ;;
+    *) break ;;
     esac
   done
 
   if (( is_mode_partial )) && (( is_mode_regexp )); then
     echo "\`--partial' and \`--regexp' are mutually exclusive" \
-      | batslib_decorate 'ERROR: assert_line' \
-      | fail
+    | batslib_decorate 'ERROR: assert_line' \
+    | fail
     return $?
   fi
 
@@ -81,8 +81,8 @@ assert_line() {
 
   if (( is_mode_regexp == 1 )) && [[ '' =~ $expected ]] || (( $? == 2 )); then
     echo "Invalid extended regular expression: \`$expected'" \
-      | batslib_decorate 'ERROR: assert_line' \
-      | fail
+    | batslib_decorate 'ERROR: assert_line' \
+    | fail
     return $?
   fi
 
@@ -92,29 +92,29 @@ assert_line() {
     if (( is_mode_regexp )); then
       if ! [[ ${lines[$idx]} =~ $expected ]]; then
         batslib_print_kv_single 6 \
-            'index' "$idx" \
-            'regexp' "$expected" \
-            'line'  "${lines[$idx]}" \
-          | batslib_decorate 'regular expression does not match line' \
-          | fail
+        'index' "$idx" \
+        'regexp' "$expected" \
+        'line'  "${lines[$idx]}" \
+        | batslib_decorate 'regular expression does not match line' \
+        | fail
       fi
     elif (( is_mode_partial )); then
       if [[ ${lines[$idx]} != *"$expected"* ]]; then
         batslib_print_kv_single 9 \
-            'index'     "$idx" \
-            'substring' "$expected" \
-            'line'      "${lines[$idx]}" \
-          | batslib_decorate 'line does not contain substring' \
-          | fail
+        'index'     "$idx" \
+        'substring' "$expected" \
+        'line'      "${lines[$idx]}" \
+        | batslib_decorate 'line does not contain substring' \
+        | fail
       fi
     else
       if [[ ${lines[$idx]} != "$expected" ]]; then
         batslib_print_kv_single 8 \
-            'index'    "$idx" \
-            'expected' "$expected" \
-            'actual'   "${lines[$idx]}" \
-          | batslib_decorate 'line differs' \
-          | fail
+        'index'    "$idx" \
+        'expected' "$expected" \
+        'actual'   "${lines[$idx]}" \
+        | batslib_decorate 'line differs' \
+        | fail
       fi
     fi
   else
@@ -124,52 +124,40 @@ assert_line() {
       for (( idx = 0; idx < ${#lines[@]}; ++idx )); do
         [[ ${lines[$idx]} =~ $expected ]] && return 0
       done
-      { local -ar single=(
-          'regexp'  "$expected"
-        )
-        local -ar may_be_multi=(
-          'output' "$output"
-        )
-        local -ir width="$( batslib_get_max_single_line_key_width \
-                              "${single[@]}" "${may_be_multi[@]}" )"
+      { local -ar single=( 'regexp' "$expected" )
+        local -ar may_be_multi=( 'output' "$output" )
+        local -ir width="$( batslib_get_max_single_line_key_width "${single[@]}" "${may_be_multi[@]}" )"
         batslib_print_kv_single "$width" "${single[@]}"
         batslib_print_kv_single_or_multi "$width" "${may_be_multi[@]}"
-      } | batslib_decorate 'no output line matches regular expression' \
-        | fail
+      } \
+      | batslib_decorate 'no output line matches regular expression' \
+      | fail
     elif (( is_mode_partial )); then
       local -i idx
       for (( idx = 0; idx < ${#lines[@]}; ++idx )); do
         [[ ${lines[$idx]} == *"$expected"* ]] && return 0
       done
-      { local -ar single=(
-          'substring' "$expected"
-        )
-        local -ar may_be_multi=(
-          'output'    "$output"
-        )
-        local -ir width="$( batslib_get_max_single_line_key_width \
-                              "${single[@]}" "${may_be_multi[@]}" )"
+      { local -ar single=( 'substring' "$expected" )
+        local -ar may_be_multi=( 'output' "$output" )
+        local -ir width="$( batslib_get_max_single_line_key_width "${single[@]}" "${may_be_multi[@]}" )"
         batslib_print_kv_single "$width" "${single[@]}"
         batslib_print_kv_single_or_multi "$width" "${may_be_multi[@]}"
-      } | batslib_decorate 'no output line contains substring' \
-        | fail
+      } \
+      | batslib_decorate 'no output line contains substring' \
+      | fail
     else
       local -i idx
       for (( idx = 0; idx < ${#lines[@]}; ++idx )); do
         [[ ${lines[$idx]} == "$expected" ]] && return 0
       done
-      { local -ar single=(
-          'line'   "$expected"
-        )
-        local -ar may_be_multi=(
-          'output' "$output"
-        )
-        local -ir width="$( batslib_get_max_single_line_key_width \
-                            "${single[@]}" "${may_be_multi[@]}" )"
+      { local -ar single=( 'line' "$expected" )
+        local -ar may_be_multi=( 'output' "$output" )
+        local -ir width="$( batslib_get_max_single_line_key_width "${single[@]}" "${may_be_multi[@]}" )"
         batslib_print_kv_single "$width" "${single[@]}"
         batslib_print_kv_single_or_multi "$width" "${may_be_multi[@]}"
-      } | batslib_decorate 'output does not contain line' \
-        | fail
+      } \
+      | batslib_decorate 'output does not contain line' \
+      | fail
     fi
   fi
 }

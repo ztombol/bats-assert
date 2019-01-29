@@ -16,7 +16,8 @@ assert_success() {
     { local -ir width=6
       batslib_print_kv_single "$width" 'status' "$status"
       batslib_print_kv_single_or_multi "$width" 'output' "$output"
-    } | batslib_decorate 'command failed' \
-      | fail
+    } \
+    | batslib_decorate 'command failed' \
+    | fail
   fi
 }
