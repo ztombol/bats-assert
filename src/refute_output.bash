@@ -67,7 +67,7 @@ refute_output() {
   if (( use_stdin )); then
     unexpected="$(cat -)"
   else
-    unexpected="$1"
+    unexpected="${1-}"
   fi
 
   if (( is_mode_regexp == 1 )) && [[ '' =~ $unexpected ]] || (( $? == 2 )); then
