@@ -4,20 +4,15 @@
   "description": "Common assertions for Bats",
   "homepage": "https://github.com/jasonkarns/bats-assert-1",
   "license": "CC0-1.0",
+  "author": "Zoltán Tömböl (https://github.com/ztombol)",
   "contributors": [
-    "Zoltán Tömböl (https://github.com/ztombol)",
     "Sam Stephenson <sstephenson@gmail.com> (http://sstephenson.us/)",
     "Jason Karns <jason.karns@gmail.com> (http://jason.karns.name)",
     "Mislav Marohnić <mislav.marohnic@gmail.com> (http://mislav.net/)",
     "Tim Pope (https://github.com/tpope)"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jasonkarns/bats-assert-1.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jasonkarns/bats-assert-1/issues"
-  },
+  "repository": "github:jasonkarns/bats-assert-1",
+  "bugs": "https://github.com/jasonkarns/bats-assert-1/issues",
   "directories": {
     "lib": "src",
     "test": "test"
