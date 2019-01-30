@@ -32,7 +32,12 @@
     "prepublishOnly": "npm run publish:github",
     "publish:github": "git push --follow-tags"
   },
+  "devDependencies": {
+    "bats": "^1",
+    "bats-support": "jasonkarns/bats-support#semver:^0.x"
+  },
   "peerDependencies": {
+    "bats": "0.4 || ^1",
     "bats-support": "jasonkarns/bats-support#semver:^0.x"
   },
   "keywords": [
