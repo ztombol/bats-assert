@@ -22,11 +22,11 @@
 #   1 - otherwise
 #
 # This function verifies that a command or function produces the expected output.
-# (Logical complement of `refute_output`)
+# (It is the logical complement of `refute_output`.)
 # Output matching can be literal (the default), partial or by regular expression.
-# The expected output can be specified either by positional argument or from STDIN by passing `-`/`--stdin` flag.
+# The expected output can be specified either by positional argument or read from STDIN by passing the `-`/`--stdin` flag.
 #
-# #### Literal matching
+# ## Literal matching
 #
 # By default, literal matching is performed.
 # The assertion fails if `$output` does not equal the expected output.
@@ -57,7 +57,7 @@
 #   --
 #   ```
 #
-# #### Existence
+# ## Existence
 #
 # To assert that any output exists at all, omit the `expected` argument.
 #
@@ -76,7 +76,7 @@
 #   --
 #   ```
 #
-# #### Partial matching
+# ## Partial matching
 #
 # Partial matching can be enabled with the `--partial` option (`-p` for short).
 # When used, the assertion fails if the expected _substring_ is not found in `$output`.
@@ -97,7 +97,7 @@
 #   --
 #   ```
 #
-# #### Regular expression matching
+# ## Regular expression matching
 #
 # Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
 # When used, the assertion fails if the *extended regular expression* does not match `$output`.

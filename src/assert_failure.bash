@@ -35,7 +35,7 @@
 #   --
 #   ```
 #
-# #### Expected status
+# ## Expected status
 #
 # When `expected_status` is provided, fail if `$status` does not equal the `expected_status`.
 #

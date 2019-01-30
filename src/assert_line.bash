@@ -22,7 +22,7 @@
 #   1 - otherwise
 #
 # Similarly to `assert_output`, this function verifies that a command or function produces the expected output.
-# (Logical complement of `refute_line`)
+# (It is the logical complement of `refute_line`.)
 # It checks that the expected line appears in the output (default) or at a specific line number.
 # Matching can be literal (default), partial or regular expression.
 #
@@ -32,7 +32,7 @@
 #
 # [bats-93]: https://github.com/sstephenson/bats/pull/93
 #
-# #### Looking for a line in the output
+# ## Looking for a line in the output
 #
 # By default, the entire output is searched for the expected line.
 # The assertion fails if the expected line is not found in `${lines[@]}`.
@@ -56,7 +56,7 @@
 #   --
 #   ```
 #
-# #### Matching a specific line
+# ## Matching a specific line
 #
 # When the `--index <idx>` option is used (`-n <idx>` for short), the expected line is matched only against the line identified by the given index.
 # The assertion fails if the expected line does not equal `${lines[<idx>]}`.
@@ -78,7 +78,7 @@
 #   --
 #   ```
 #
-# #### Partial matching
+# ## Partial matching
 #
 # Partial matching can be enabled with the `--partial` option (`-p` for short).
 # When used, a match fails if the expected *substring* is not found in the matched line.
@@ -102,7 +102,7 @@
 #   --
 #   ```
 #
-# #### Regular expression matching
+# ## Regular expression matching
 #
 # Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
 # When used, a match fails if the *extended regular expression* does not match the line being tested.
