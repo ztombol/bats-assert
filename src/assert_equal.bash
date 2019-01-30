@@ -15,6 +15,14 @@
 #   }
 #   ```
 #
+# IO:
+#   STDERR - expected and actual values, on failure
+# Globals:
+#   none
+# Returns:
+#   0 - if values equal
+#   1 - otherwise
+#
 # On failure, the expected and actual values are displayed.
 #
 #   ```
@@ -23,14 +31,6 @@
 #   actual   : have
 #   --
 #   ```
-#
-# Globals:
-#   none
-# Returns:
-#   0 - if values equal
-#   1 - otherwise
-# Outputs:
-#   STDERR - expected and actual values, on failure
 assert_equal() {
   if [[ $1 != "$2" ]]; then
     batslib_print_kv_single_or_multi 8 \

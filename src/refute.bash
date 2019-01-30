@@ -11,6 +11,14 @@
 #                   [Compound commands](https://www.gnu.org/software/bash/manual/bash.html#Compound-Commands),
 #                   such as `[[`, can be used only when executed with `bash -c`.*
 #
+# IO:
+#   STDERR - the successful expression, on failure
+# Globals:
+#   none
+# Returns:
+#   0 - if expression evaluates to false
+#   1 - otherwise
+#
 #   ```bash
 #   @test 'refute()' {
 #     rm -f '/var/log/test.log'
@@ -25,14 +33,6 @@
 #   expression : [ -e /var/log/test.log ]
 #   --
 #   ```
-#
-# Globals:
-#   none
-# Returns:
-#   0 - if expression evaluates to false
-#   1 - otherwise
-# Outputs:
-#   STDERR - the successful expression, on failure
 refute() {
   if "$@"; then
     batslib_print_kv_single 10 'expression' "$*" \

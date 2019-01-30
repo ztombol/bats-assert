@@ -9,6 +9,17 @@
 #   <expected_status>    The specific status code to check against.
 #                        If not provided, simply asserts status is != 0.
 #
+# IO:
+#   STDERR - `$output`, on failure;
+#          - also, `$status` and `expected_status`, if provided
+# Globals:
+#   status
+#   output
+# Returns:
+#   0 - if `$status' is 0,
+#       or if expected_status is provided but does not equal `$status'
+#   1 - otherwise
+#
 #   ```bash
 #   @test 'assert_failure() status only' {
 #     run echo 'Success!'
@@ -44,17 +55,6 @@
 #   output   : Error!
 #   --
 #   ```
-#
-# Globals:
-#   status
-#   output
-# Returns:
-#   0 - if `$status' is 0,
-#       or if expected_status is provided but does not equal `$status'
-#   1 - otherwise
-# Outputs:
-#   STDERR - `$output`, on failure;
-#          - also, `$status` and `expected_status`, if provided
 assert_failure() {
   : "${output?}"
   : "${status?}"

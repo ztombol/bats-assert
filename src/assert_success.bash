@@ -5,6 +5,15 @@
 #
 # Usage: assert_success
 #
+# IO:
+#   STDERR - `$status` and `$output`, on failure
+# Globals:
+#   status
+#   output
+# Returns:
+#   0 - if `$status' is 0
+#   1 - otherwise
+#
 #   ```bash
 #   @test 'assert_success() status only' {
 #     run bash -c "echo 'Error!'; exit 1"
@@ -20,15 +29,6 @@
 #   output : Error!
 #   --
 #   ```
-#
-# Globals:
-#   status
-#   output
-# Returns:
-#   0 - if `$status' is 0
-#   1 - otherwise
-# Outputs:
-#   STDERR - `$status` and `$output`, on failure
 assert_success() {
   : "${output?}"
   : "${status?}"

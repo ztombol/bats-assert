@@ -11,11 +11,21 @@
 #   -, --stdin     Read `expected` value from STDIN
 #   <expected>     The expected value, substring or regular expression
 #
+# IO:
+#   STDIN - [=$1] expected output
+#   STDERR - details, on failure
+#            error message, on error
+# Globals:
+#   output
+# Returns:
+#   0 - if output matches the expected value/partial/regexp
+#   1 - otherwise
+#
 # This function verifies that a command or function produces the expected output.
 # (Logical complement of `refute_output`)
 # Output matching can be literal (the default), partial or by regular expression.
 # The expected output can be specified either by positional argument or from STDIN by passing `-`/`--stdin` flag.
-
+#
 # #### Literal matching
 #
 # By default, literal matching is performed.
@@ -111,17 +121,6 @@
 #   output : Foobar 0.1.0
 #   --
 #   ```
-#
-# Globals:
-#   output
-# Returns:
-#   0 - if output matches the expected value/partial/regexp
-#   1 - otherwise
-# Inputs:
-#   STDIN - [=$1] expected output
-# Outputs:
-#   STDERR - details, on failure
-#            error message, on error
 assert_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0

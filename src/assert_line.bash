@@ -11,6 +11,16 @@
 #   -e, --regexp      Treat `expected` as an extended regular expression
 #   <expected>        The expected line string, substring, or regular expression
 #
+# IO:
+#   STDERR - details, on failure
+#            error message, on error
+# Globals:
+#   output
+#   lines
+# Returns:
+#   0 - if matching line found
+#   1 - otherwise
+#
 # Similarly to `assert_output`, this function verifies that a command or function produces the expected output.
 # (Logical complement of `refute_line`)
 # It checks that the expected line appears in the output (default) or at a specific line number.
@@ -116,16 +126,6 @@
 #   line   : have-1
 #   --
 #   ```
-#
-# Globals:
-#   output
-#   lines
-# Returns:
-#   0 - if matching line found
-#   1 - otherwise
-# Outputs:
-#   STDERR - details, on failure
-#            error message, on error
 # FIXME(ztombol): Display `${lines[@]}' instead of `$output'!
 assert_line() {
   local -i is_match_line=0

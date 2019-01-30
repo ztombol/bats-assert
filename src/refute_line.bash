@@ -11,6 +11,16 @@
 #   -e, --regexp      Treat `unexpected` as an extended regular expression
 #   <unexpected>      The unexpected line string, substring, or regular expression.
 #
+# IO:
+#   STDERR - details, on failure
+#            error message, on error
+# Globals:
+#   output
+#   lines
+# Returns:
+#   0 - if match not found
+#   1 - otherwise
+#
 # Similarly to `refute_output`, this function verifies that a command or function does not produce the unexpected output.
 # (Logical complement of `assert_line`)
 # It checks that the unexpected line does not appear in the output (default) or at a specific line number.
@@ -119,16 +129,6 @@
 #   line   : Foobar v0.1.0
 #   --
 #   ```
-#
-# Globals:
-#   output
-#   lines
-# Returns:
-#   0 - if match not found
-#   1 - otherwise
-# Outputs:
-#   STDERR - details, on failure
-#            error message, on error
 # FIXME(ztombol): Display `${lines[@]}' instead of `$output'!
 refute_line() {
   local -i is_match_line=0

@@ -11,6 +11,16 @@
 #   -, --stdin     Read `unexpected` value from STDIN
 #   <unexpected>   The unexpected value, substring, or regular expression
 #
+# IO:
+#   STDIN - [=$1] unexpected output
+#   STDERR - details, on failure
+#            error message, on error
+# Globals:
+#   output
+# Returns:
+#   0 - if output matches the unexpected value/partial/regexp
+#   1 - otherwise
+#
 # This function verifies that a command or function does not produce the unexpected output.
 # (Logical complement of `assert_output`)
 # Output matching can be literal (the default), partial or by regular expression.
@@ -111,17 +121,6 @@
 #   output : Foobar v0.1.0
 #   --
 #   ```
-#
-# Globals:
-#   output
-# Returns:
-#   0 - if output matches the unexpected value/partial/regexp
-#   1 - otherwise
-# Inputs:
-#   STDIN - [=$1] unexpected output
-# Outputs:
-#   STDERR - details, on failure
-#            error message, on error
 refute_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
