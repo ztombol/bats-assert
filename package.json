@@ -27,6 +27,7 @@
     "src"
   ],
   "scripts": {
+    "test": "bats ${CI+-t} test",
     "postversion": "npm publish",
     "prepublishOnly": "npm run publish:github",
     "publish:github": "git push --follow-tags"
