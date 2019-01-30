@@ -33,7 +33,7 @@
     "publish:github": "git push --follow-tags"
   },
   "peerDependencies": {
-    "bats-support": "git+https://github.com/ztombol/bats-support.git#v0.2.0"
+    "bats-support": "jasonkarns/bats-support#semver:^0.x"
   },
   "keywords": [
     "bats",
