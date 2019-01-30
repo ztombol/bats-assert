@@ -65,7 +65,7 @@ assert_output() {
   if (( use_stdin )); then
     expected="$(cat -)"
   else
-    expected="$1"
+    expected="${1-}"
   fi
 
   # Matching.

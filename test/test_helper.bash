@@ -7,6 +7,9 @@ load "${TEST_DEPS_DIR}/bats-support/load.bash"
 # Load library.
 load '../load'
 
+# validate that bats-assert is safe to use under -u
+set -u
+
 : "${status:=}"
 : "${lines:=}"
 : "${output:=}"
