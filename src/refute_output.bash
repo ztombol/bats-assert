@@ -38,6 +38,7 @@ refute_output() {
   local -i is_mode_regexp=0
   local -i is_mode_empty=0
   local -i use_stdin=0
+  : "${output?}"
 
   # Handle options.
   if (( $# == 0 )); then
@@ -85,7 +86,7 @@ refute_output() {
       | fail
     fi
   elif (( is_mode_regexp )); then
-    if [[ $output =~ $unexpected ]] || (( $? == 0 )); then
+    if [[ $output =~ $unexpected ]]; then
       batslib_print_kv_single_or_multi 6 \
       'regexp'  "$unexpected" \
       'output' "$output" \

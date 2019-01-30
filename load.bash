@@ -18,6 +18,7 @@
 # All output is formatted for readability using the functions of
 # `output.bash' and sent to the standard error.
 
+# shellcheck disable=1090
 source "$(dirname "${BASH_SOURCE[0]}")/src/assert.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/src/refute.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/src/assert_equal.bash"

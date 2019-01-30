@@ -51,6 +51,7 @@ refute_line() {
   local -i is_match_line=0
   local -i is_mode_partial=0
   local -i is_mode_regexp=0
+  : "${lines?}"
 
   # Handle options.
   while (( $# > 0 )); do
@@ -94,7 +95,7 @@ refute_line() {
   if (( is_match_line )); then
     # Specific line.
     if (( is_mode_regexp )); then
-      if [[ ${lines[$idx]} =~ $unexpected ]] || (( $? == 0 )); then
+      if [[ ${lines[$idx]} =~ $unexpected ]]; then
         batslib_print_kv_single 6 \
         'index' "$idx" \
         'regexp' "$unexpected" \

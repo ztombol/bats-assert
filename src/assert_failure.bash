@@ -16,6 +16,9 @@
 # Outputs:
 #   STDERR - details, on failure
 assert_failure() {
+  : "${output?}"
+  : "${status?}"
+
   (( $# > 0 )) && local -r expected="$1"
   if (( status == 0 )); then
     batslib_print_kv_single_or_multi 6 'output' "$output" \

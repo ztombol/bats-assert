@@ -36,6 +36,7 @@ assert_output() {
   local -i is_mode_regexp=0
   local -i is_mode_nonempty=0
   local -i use_stdin=0
+  : "${output?}"
 
   # Handle options.
   if (( $# == 0 )); then
