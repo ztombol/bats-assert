@@ -1,32 +1,121 @@
-# Fail and display details if `$output' matches the unexpected output.
-# The unexpected output can be specified either by the first parameter
-# or on the standard input.
+# refute_output
+# =============
 #
-# By default, literal matching is performed. The assertion fails if the
-# unexpected output equals `$output'. Details include `$output'.
+# Summary: Fail if `$output' matches the unexpected output.
 #
-# Option `--partial' enables partial matching. The assertion fails if
-# the unexpected substring is found in `$output'. The unexpected
-# substring is added to details.
+# Usage: refute_output [-p | -e] [- | [--] <unexpected>]
 #
-# Option `--regexp' enables regular expression matching. The assertion
-# fails if the extended regular expression does matches `$output'. The
-# regular expression is added to details. An invalid regular expression
-# causes an error to be displayed.
+# Options:
+#   -p, --partial  Match if `unexpected` is a substring of `$output`
+#   -e, --regexp   Treat `unexpected` as an extended regular expression
+#   -, --stdin     Read `unexpected` value from STDIN
+#   <unexpected>   The unexpected value, substring, or regular expression
 #
-# It is an error to use partial and regular expression matching
-# simultaneously.
+# This function verifies that a command or function does not produce the unexpected output.
+# (Logical complement of `assert_output`)
+# Output matching can be literal (the default), partial or by regular expression.
+# The unexpected output can be specified either by positional argument or from STDIN by passing `-`/`--stdin` flag.
+
+# #### Literal matching
+#
+# By default, literal matching is performed.
+# The assertion fails if `$output` equals the unexpected output.
+#
+#   ```bash
+#   @test 'refute_output()' {
+#     run echo 'want'
+#     refute_output 'want'
+#   }
+#
+#   @test 'refute_output() with pipe' {
+#     run echo 'hello'
+#     echo 'world' | refute_output -
+#   }
+#
+#   @test 'refute_output() with herestring' {
+#     run echo 'hello'
+#     refute_output - <<< world
+#   }
+#   ```
+#
+# On failure, the output is displayed.
+#
+#   ```
+#   -- output equals, but it was expected to differ --
+#   output : want
+#   --
+#   ```
+#
+# #### Existence
+#
+# To assert that there is no output at all, omit the matching argument.
+#
+#   ```bash
+#   @test 'refute_output()' {
+#     run foo --silent
+#     refute_output
+#   }
+#   ```
+#
+# On failure, an error message is displayed.
+#
+#   ```
+#   -- unexpected output --
+#   expected no output, but output was non-empty
+#   --
+#   ```
+# #### Partial matching
+#
+# Partial matching can be enabled with the `--partial` option (`-p` for short).
+# When used, the assertion fails if the unexpected _substring_ is found in `$output`.
+#
+#   ```bash
+#   @test 'refute_output() partial matching' {
+#     run echo 'ERROR: no such file or directory'
+#     refute_output --partial 'ERROR'
+#   }
+#   ```
+#
+# On failure, the substring and the output are displayed.
+#
+#   ```
+#   -- output should not contain substring --
+#   substring : ERROR
+#   output    : ERROR: no such file or directory
+#   --
+#   ```
+#
+#
+#
+# #### Regular expression matching
+#
+# Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
+# When used, the assertion fails if the *extended regular expression* matches `$output`.
+#
+# *__Note__:
+# The anchors `^` and `$` bind to the beginning and the end (respectively) of the entire output;
+# not individual lines.*
+#
+#   ```bash
+#   @test 'refute_output() regular expression matching' {
+#     run echo 'Foobar v0.1.0'
+#     refute_output --regexp '^Foobar v[0-9]+\.[0-9]+\.[0-9]$'
+#   }
+#   ```
+#
+# On failure, the regular expression and the output are displayed.
+#
+#   ```
+#   -- regular expression should not match output --
+#   regexp : ^Foobar v[0-9]+\.[0-9]+\.[0-9]$
+#   output : Foobar v0.1.0
+#   --
+#   ```
 #
 # Globals:
 #   output
-# Options:
-#   -p, --partial - partial matching
-#   -e, --regexp - extended regular expression matching
-#   -, --stdin - read unexpected output from the standard input
-# Arguments:
-#   $1 - unexpected output
 # Returns:
-#   0 - unexpected matches the actual output
+#   0 - if output matches the unexpected value/partial/regexp
 #   1 - otherwise
 # Inputs:
 #   STDIN - [=$1] unexpected output
