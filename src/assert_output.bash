@@ -1,36 +1,126 @@
-# Fail and display details if `$output' does not match the expected
-# output. The expected output can be specified either by the first
-# parameter or on the standard input.
+# assert_output
+# =============
 #
-# By default, literal matching is performed. The assertion fails if the
-# expected output does not equal `$output'. Details include both values.
+# Summary: Fail if `$output' does not match the expected output.
 #
-# Option `--partial' enables partial matching. The assertion fails if
-# the expected substring cannot be found in `$output'.
+# Usage: assert_output [-p | -e] [- | [--] <expected>]
 #
-# Option `--regexp' enables regular expression matching. The assertion
-# fails if the extended regular expression does not match `$output'. An
-# invalid regular expression causes an error to be displayed.
-#
-# It is an error to use partial and regular expression matching
-# simultaneously.
-#
-# Globals:
-#   output
 # Options:
-#   -p, --partial - partial matching
-#   -e, --regexp - extended regular expression matching
-#   -, --stdin - read expected output from the standard input
-# Arguments:
-#   $1 - expected output
-# Returns:
-#   0 - expected matches the actual output
-#   1 - otherwise
-# Inputs:
+#   -p, --partial  Match if `expected` is a substring of `$output`
+#   -e, --regexp   Treat `expected` as an extended regular expression
+#   -, --stdin     Read `expected` value from STDIN
+#   <expected>     The expected value, substring or regular expression
+#
+# IO:
 #   STDIN - [=$1] expected output
-# Outputs:
 #   STDERR - details, on failure
 #            error message, on error
+# Globals:
+#   output
+# Returns:
+#   0 - if output matches the expected value/partial/regexp
+#   1 - otherwise
+#
+# This function verifies that a command or function produces the expected output.
+# (It is the logical complement of `refute_output`.)
+# Output matching can be literal (the default), partial or by regular expression.
+# The expected output can be specified either by positional argument or read from STDIN by passing the `-`/`--stdin` flag.
+#
+# ## Literal matching
+#
+# By default, literal matching is performed.
+# The assertion fails if `$output` does not equal the expected output.
+#
+#   ```bash
+#   @test 'assert_output()' {
+#     run echo 'have'
+#     assert_output 'want'
+#   }
+#
+#   @test 'assert_output() with pipe' {
+#     run echo 'hello'
+#     echo 'hello' | assert_output -
+#   }
+#
+#   @test 'assert_output() with herestring' {
+#     run echo 'hello'
+#     assert_output - <<< hello
+#   }
+#   ```
+#
+# On failure, the expected and actual output are displayed.
+#
+#   ```
+#   -- output differs --
+#   expected : want
+#   actual   : have
+#   --
+#   ```
+#
+# ## Existence
+#
+# To assert that any output exists at all, omit the `expected` argument.
+#
+#   ```bash
+#   @test 'assert_output()' {
+#     run echo 'have'
+#     assert_output
+#   }
+#   ```
+#
+# On failure, an error message is displayed.
+#
+#   ```
+#   -- no output --
+#   expected non-empty output, but output was empty
+#   --
+#   ```
+#
+# ## Partial matching
+#
+# Partial matching can be enabled with the `--partial` option (`-p` for short).
+# When used, the assertion fails if the expected _substring_ is not found in `$output`.
+#
+#   ```bash
+#   @test 'assert_output() partial matching' {
+#     run echo 'ERROR: no such file or directory'
+#     assert_output --partial 'SUCCESS'
+#   }
+#   ```
+#
+# On failure, the substring and the output are displayed.
+#
+#   ```
+#   -- output does not contain substring --
+#   substring : SUCCESS
+#   output    : ERROR: no such file or directory
+#   --
+#   ```
+#
+# ## Regular expression matching
+#
+# Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
+# When used, the assertion fails if the *extended regular expression* does not match `$output`.
+#
+# *__Note__:
+# The anchors `^` and `$` bind to the beginning and the end (respectively) of the entire output;
+# not individual lines.*
+#
+#   ```bash
+#   @test 'assert_output() regular expression matching' {
+#     run echo 'Foobar 0.1.0'
+#     assert_output --regexp '^Foobar v[0-9]+\.[0-9]+\.[0-9]$'
+#   }
+#   ```
+#
+# On failure, the regular expression and the output are displayed.
+#
+#   ```
+#   -- regular expression does not match output --
+#   regexp : ^Foobar v[0-9]+\.[0-9]+\.[0-9]$
+#   output : Foobar 0.1.0
+#   --
+#   ```
 assert_output() {
   local -i is_mode_partial=0
   local -i is_mode_regexp=0

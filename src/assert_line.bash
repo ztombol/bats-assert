@@ -1,47 +1,131 @@
-# Fail and display details if the expected line is not found in the
-# output (default) or in a specific line of it.
+# assert_line
+# ===========
 #
-# By default, the entire output is searched for the expected line. The
-# expected line is matched against every element of `${lines[@]}'. If no
-# match is found, the assertion fails. Details include the expected line
-# and `${lines[@]}'.
+# Summary: Fail if the expected line is not found in the output (default) or at a specific line number.
 #
-# When `--index <idx>' is specified, only the <idx>-th line is matched.
-# If the expected line does not match `${lines[<idx>]}', the assertion
-# fails. Details include <idx> and the compared lines.
+# Usage: assert_line [-n index] [-p | -e] [--] <expected>
 #
-# By default, literal matching is performed. A literal match fails if
-# the expected string does not equal the matched string.
+# Options:
+#   -n, --index <idx> Match the <idx>th line
+#   -p, --partial     Match if `expected` is a substring of `$output` or line <idx>
+#   -e, --regexp      Treat `expected` as an extended regular expression
+#   <expected>        The expected line string, substring, or regular expression
 #
-# Option `--partial' enables partial matching. A partial match fails if
-# the expected substring is not found in the target string.
-#
-# Option `--regexp' enables regular expression matching. A regular
-# expression match fails if the extended regular expression does not
-# match the target string. An invalid regular expression causes an error
-# to be displayed.
-#
-# It is an error to use partial and regular expression matching
-# simultaneously.
-#
-# Mandatory arguments to long options are mandatory for short options
-# too.
-#
+# IO:
+#   STDERR - details, on failure
+#            error message, on error
 # Globals:
 #   output
 #   lines
-# Options:
-#   -n, --index <idx> - match the <idx>-th line
-#   -p, --partial - partial matching
-#   -e, --regexp - extended regular expression matching
-# Arguments:
-#   $1 - expected line
 # Returns:
-#   0 - match found
+#   0 - if matching line found
 #   1 - otherwise
-# Outputs:
-#   STDERR - details, on failure
-#            error message, on error
+#
+# Similarly to `assert_output`, this function verifies that a command or function produces the expected output.
+# (It is the logical complement of `refute_line`.)
+# It checks that the expected line appears in the output (default) or at a specific line number.
+# Matching can be literal (default), partial or regular expression.
+#
+# *__Warning:__
+# Due to a [bug in Bats][bats-93], empty lines are discarded from `${lines[@]}`,
+# causing line indices to change and preventing testing for empty lines.*
+#
+# [bats-93]: https://github.com/sstephenson/bats/pull/93
+#
+# ## Looking for a line in the output
+#
+# By default, the entire output is searched for the expected line.
+# The assertion fails if the expected line is not found in `${lines[@]}`.
+#
+#   ```bash
+#   @test 'assert_line() looking for line' {
+#     run echo $'have-0\nhave-1\nhave-2'
+#     assert_line 'want'
+#   }
+#   ```
+#
+# On failure, the expected line and the output are displayed.
+#
+#   ```
+#   -- output does not contain line --
+#   line : want
+#   output (3 lines):
+#     have-0
+#     have-1
+#   have-2
+#   --
+#   ```
+#
+# ## Matching a specific line
+#
+# When the `--index <idx>` option is used (`-n <idx>` for short), the expected line is matched only against the line identified by the given index.
+# The assertion fails if the expected line does not equal `${lines[<idx>]}`.
+#
+#   ```bash
+#   @test 'assert_line() specific line' {
+#     run echo $'have-0\nhave-1\nhave-2'
+#     assert_line --index 1 'want-1'
+#   }
+#   ```
+#
+# On failure, the index and the compared lines are displayed.
+#
+#   ```
+#   -- line differs --
+#   index    : 1
+#   expected : want-1
+#   actual   : have-1
+#   --
+#   ```
+#
+# ## Partial matching
+#
+# Partial matching can be enabled with the `--partial` option (`-p` for short).
+# When used, a match fails if the expected *substring* is not found in the matched line.
+#
+#   ```bash
+#   @test 'assert_line() partial matching' {
+#     run echo $'have 1\nhave 2\nhave 3'
+#     assert_line --partial 'want'
+#   }
+#   ```
+#
+# On failure, the same details are displayed as for literal matching, except that the substring replaces the expected line.
+#
+#   ```
+#   -- no output line contains substring --
+#   substring : want
+#   output (3 lines):
+#     have 1
+#     have 2
+#     have 3
+#   --
+#   ```
+#
+# ## Regular expression matching
+#
+# Regular expression matching can be enabled with the `--regexp` option (`-e` for short).
+# When used, a match fails if the *extended regular expression* does not match the line being tested.
+#
+# *__Note__:
+# As expected, the anchors `^` and `$` bind to the beginning and the end (respectively) of the matched line.*
+#
+#   ```bash
+#   @test 'assert_line() regular expression matching' {
+#     run echo $'have-0\nhave-1\nhave-2'
+#     assert_line --index 1 --regexp '^want-[0-9]$'
+#   }
+#   ```
+#
+# On failure, the same details are displayed as for literal matching, except that the regular expression replaces the expected line.
+#
+#   ```
+#   -- regular expression does not match line --
+#   index  : 1
+#   regexp : ^want-[0-9]$
+#   line   : have-1
+#   --
+#   ```
 # FIXME(ztombol): Display `${lines[@]}' instead of `$output'!
 assert_line() {
   local -i is_match_line=0

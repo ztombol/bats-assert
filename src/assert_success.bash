@@ -1,16 +1,34 @@
-# Fail and display details if `$status' is not 0. Details include
-# `$status' and `$output'.
+# assert_success
+# ==============
 #
+# Summary: Fail if `$status` is not 0.
+#
+# Usage: assert_success
+#
+# IO:
+#   STDERR - `$status` and `$output`, on failure
 # Globals:
 #   status
 #   output
-# Arguments:
-#   none
 # Returns:
-#   0 - `$status' is 0
+#   0 - if `$status' is 0
 #   1 - otherwise
-# Outputs:
-#   STDERR - details, on failure
+#
+#   ```bash
+#   @test 'assert_success() status only' {
+#     run bash -c "echo 'Error!'; exit 1"
+#     assert_success
+#   }
+#   ```
+#
+# On failure, `$status` and `$output` are displayed.
+#
+#   ```
+#   -- command failed --
+#   status : 1
+#   output : Error!
+#   --
+#   ```
 assert_success() {
   : "${output?}"
   : "${status?}"
