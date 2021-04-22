@@ -7,19 +7,55 @@
 
 `bats-assert` is a helper library providing common assertions for [Bats][bats].
 
-Assertions are functions that perform a test and output relevant information on failure to help debugging.
-They return 1 on failure and 0 otherwise.
-Output, [formatted][bats-support-output] for readability, is sent to the standard error to make assertions usable outside of `@test` blocks too.
+- [Install](#install)
+- [Usage](#usage)
+- [Options](#options)
+- [Full Assertion API](#full-assertion-api)
 
-Assertions testing exit code and output operate on the results of the most recent invocation of `run`.
+In the context of this project, an [assertion][wikipedia-assertions] is a function that perform a test and returns `1` on failure or `0` on success.
+To make debugging easier, the assertion also outputs relevant information on failure.
+The output is [formatted][bats-support-output] for readability.
+To make assertions usable outside of `@test` blocks, the output is sent to [stderr][wikipedia-stderr].
 
-Dependencies:
-- [`bats-support`][bats-support] (formerly `bats-core`) - output formatting
+The most recent invocation of Bats' `run` function is used for testing assertions on output and status code.
 
-See the [shared documentation][bats-docs] to learn how to install and load this library.
+[wikipedia-assertions]: https://en.wikipedia.org/wiki/Assertion_(software_development)
+[wikipedia-stderr]: https://en.wikipedia.org/wiki/Standard_streams#Standard_error_(stderr)
 
+## Install
+
+This project has one dependency, for output formatting: [`bats-support`][bats-support]
+
+Read the [shared documentation][bats-docs] to learn how to install and load both libraries.
 
 ## Usage
+
+This project provides the following functions:
+
+ - [assert](#assert) / [refute](#refute) Assert a given expression evaluates to `true` or `false`.
+ - [assert_equal](#assert_equal) Assert two parameters are equal.
+ - [assert_success](#assert_success) / [assert_failure](#assert_failure) Assert exit status is `0` or `1`.
+ - [assert_output](#assert_output) / [refute_output](#refute_output) Assert output does (or does not) contain given content.
+ - [assert_line](#assert_line) / [refute_line](#refute_line) Assert a specific line of output does (or does not) contain given content.
+
+These commands are described in more detail below.
+
+## Options
+
+For functions that have options, `--` disables option parsing for the remaining arguments to allow using arguments identical to one of the allowed options.
+
+```bash
+assert_output -- '-p'
+```
+
+Specifying `--` as an argument is similarly simple.
+
+```bash
+refute_line -- '--'
+```
+
+
+## Full Assertion API
 
 ### `assert`
 
@@ -636,26 +672,10 @@ An error is displayed if the specified extended regular expression is invalid.
 This option and partial matching (`--partial` or `-p`) are mutually exclusive.
 An error is displayed when used simultaneously.
 
-
-## Options
-
-For functions that have options, `--` disables option parsing for the remaining arguments to allow using arguments identical to one of the allowed options.
-
-```bash
-assert_output -- '-p'
-```
-
-Specifying `--` as an argument is similarly simple.
-
-```bash
-refute_line -- '--'
-```
-
-
 <!-- REFERENCES -->
 
-[bats]: https://github.com/sstephenson/bats
+[bats]: https://github.com/bats-core/bats-core
+[bash-comp-cmd]: https://www.gnu.org/software/bash/manual/bash.html#Compound-Commands
+[bats-docs]: https://github.com/ztombol/bats-docs
 [bats-support-output]: https://github.com/ztombol/bats-support#output-formatting
 [bats-support]: https://github.com/ztombol/bats-support
-[bats-docs]: https://github.com/ztombol/bats-docs
-[bash-comp-cmd]: https://www.gnu.org/software/bash/manual/bash.html#Compound-Commands
