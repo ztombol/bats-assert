@@ -676,6 +676,6 @@ An error is displayed when used simultaneously.
 
 [bats]: https://github.com/bats-core/bats-core
 [bash-comp-cmd]: https://www.gnu.org/software/bash/manual/bash.html#Compound-Commands
-[bats-docs]: https://github.com/ztombol/bats-docs
-[bats-support-output]: https://github.com/ztombol/bats-support#output-formatting
-[bats-support]: https://github.com/ztombol/bats-support
+[bats-docs]: https://bats-core.readthedocs.io/
+[bats-support-output]: https://github.com/bats-core/bats-support#output-formatting
+[bats-support]: https://github.com/bats-core/bats-support
