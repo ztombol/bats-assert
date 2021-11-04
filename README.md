@@ -34,6 +34,7 @@ This project provides the following functions:
 
  - [assert](#assert) / [refute](#refute) Assert a given expression evaluates to `true` or `false`.
  - [assert_equal](#assert_equal) Assert two parameters are equal.
+ - [assert_not_equal](#assert_not_equal) Assert two parameters are not equal.
  - [assert_success](#assert_success) / [assert_failure](#assert_failure) Assert exit status is `0` or `1`.
  - [assert_output](#assert_output) / [refute_output](#refute_output) Assert output does (or does not) contain given content.
  - [assert_line](#assert_line) / [refute_line](#refute_line) Assert a specific line of output does (or does not) contain given content.
@@ -121,6 +122,28 @@ On failure, the expected and actual values are displayed.
 -- values do not equal --
 expected : want
 actual   : have
+--
+```
+
+If either value is longer than one line both are displayed in *multi-line* format.
+
+
+### `assert_not_equal`
+
+Fail if the two parameters, actual and unexpected value respectively, are equal.
+
+```bash
+@test 'assert_not_equal()' {
+  assert_not_equal 'foobar' 'foobar'
+}
+```
+
+On failure, the expected and actual values are displayed.
+
+```
+-- values should not be equal --
+unexpected : foobar
+actual     : foobar
 --
 ```
 

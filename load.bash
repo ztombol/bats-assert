@@ -22,6 +22,7 @@
 source "$(dirname "${BASH_SOURCE[0]}")/src/assert.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/src/refute.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/src/assert_equal.bash"
+source "$(dirname "${BASH_SOURCE[0]}")/src/assert_not_equal.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/src/assert_success.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/src/assert_failure.bash"
 source "$(dirname "${BASH_SOURCE[0]}")/src/assert_output.bash"
