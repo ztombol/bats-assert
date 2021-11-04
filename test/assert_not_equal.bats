@@ -13,6 +13,7 @@ load test_helper
   assert_test_pass
 
   run assert_not_equal "" "foo"
+  assert_test_pass
 }
 
 @test 'assert_not_equal() <actual> <unexpected>: returns 1 and displays details if <actual> equals <unexpected>' {
