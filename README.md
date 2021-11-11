@@ -68,7 +68,7 @@ Fail if the given expression evaluates to false.
 
 ```bash
 @test 'assert()' {
-  touch '/var/log/test.log'
+  rm -f '/var/log/test.log'
   assert [ -e '/var/log/test.log' ]
 }
 ```
@@ -92,7 +92,7 @@ Fail if the given expression evaluates to true.
 
 ```bash
 @test 'refute()' {
-  rm -f '/var/log/test.log'
+  touch '/var/log/test.log'
   refute [ -e '/var/log/test.log' ]
 }
 ```
