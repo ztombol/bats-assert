@@ -140,7 +140,7 @@ refute_line() {
   while (( $# > 0 )); do
     case "$1" in
     -n|--index)
-      if (( $# < 2 )) || ! [[ $2 =~ ^([0-9]|[1-9][0-9]+)$ ]]; then
+      if (( $# < 2 )) || ! [[ $2 =~ ^-?([0-9]|[1-9][0-9]+)$ ]]; then
         echo "\`--index' requires an integer argument: \`$2'" \
         | batslib_decorate 'ERROR: refute_line' \
         | fail
