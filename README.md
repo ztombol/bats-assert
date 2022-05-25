@@ -693,6 +693,41 @@ An error is displayed if the specified extended regular expression is invalid.
 This option and partial matching (`--partial` or `-p`) are mutually exclusive.
 An error is displayed when used simultaneously.
 
+### `assert_regex`
+
+This function is similar to `assert_equal` but uses pattern matching instead of
+equality, by wrapping `[[ value =~ pattern ]]`.
+
+Fail if the value (first parameter) does not match the pattern (second
+parameter).
+
+```bash
+@test 'assert_regex()' {
+  assert_regex 'what' 'x$'
+}
+```
+
+On failure, the value and the pattern are displayed.
+
+```
+-- values does not match regular expression --
+value    : what
+pattern  : x$
+--
+```
+
+If the value is longer than one line then it is displayed in *multi-line*
+format.
+
+An error is displayed if the specified extended regular expression is invalid.
+
+For description of the matching behavior, refer to the documentation of the
+`=~` operator in the
+[Bash manual]: https://www.gnu.org/software/bash/manual/html_node/Conditional-Constructs.html.
+Note that the `BASH_REMATCH` array is available immediately after the
+assertion succeeds but is fragile, i.e. prone to being overwritten as a side
+effect of other actions.
+
 <!-- REFERENCES -->
 
 [bats]: https://github.com/bats-core/bats-core
