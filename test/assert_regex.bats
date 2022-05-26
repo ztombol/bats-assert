@@ -23,6 +23,20 @@ pattern  : ^[a-z]b[c-z]+
 ERR_MSG
 }
 
+@test "assert_regex() <value> <pattern>: outputs multi-line <value> nicely when it fails" {
+  run assert_regex $'bcd\n123' '^[a-z]b[c-z]+'
+  assert_test_fail <<'ERR_MSG'
+
+-- value does not match regular expression --
+value (2 lines):
+  bcd
+  123
+pattern (1 lines):
+  ^[a-z]b[c-z]+
+--
+ERR_MSG
+}
+
 # Error handling
 @test "assert_regex() <value> <pattern>: returns 1 and displays an error message if <pattern> is not a valid extended regular expression" {
   run assert_regex value '[.*'
