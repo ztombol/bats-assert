@@ -31,6 +31,12 @@ ERR_MSG
   [ "${BASH_REMATCH[0]}" = 'bcd' ]
 }
 
+@test "assert_regex() <value> <pattern>: matches case-insensitively when 'nocasematch' is set" {
+  shopt -s nocasematch
+
+  assert_regex 'aBc' 'ABC'
+}
+
 @test "assert_regex() <value> <pattern>: outputs multi-line <value> nicely when it fails" {
   run assert_regex $'bcd\n123' '^[a-z]b[c-z]+'
   assert_test_fail <<'ERR_MSG'
