@@ -19,6 +19,7 @@ load test_helper
 -- value does not match regular expression --
 value    : bcd
 pattern  : ^[a-z]b[c-z]+
+case     : sensitive
 --
 ERR_MSG
 }
@@ -47,6 +48,23 @@ value (2 lines):
   123
 pattern (1 lines):
   ^[a-z]b[c-z]+
+case (1 lines):
+  sensitive
+--
+ERR_MSG
+
+  shopt -s nocasematch
+  run assert_regex $'bcd\n123' '^[a-z]b[c-z]+'
+  assert_test_fail <<'ERR_MSG'
+
+-- value does not match regular expression --
+value (2 lines):
+  bcd
+  123
+pattern (1 lines):
+  ^[a-z]b[c-z]+
+case (1 lines):
+  insensitive
 --
 ERR_MSG
 }
