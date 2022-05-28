@@ -23,6 +23,14 @@ pattern  : ^[a-z]b[c-z]+
 ERR_MSG
 }
 
+@test "assert_regex() <value> <pattern>: provides results in BASH_REMATCH" {
+  unset -v BASH_REMATCH
+
+  assert_regex 'abcd' 'b.d'
+  declare -p BASH_REMATCH
+  [ "${BASH_REMATCH[0]}" = 'bcd' ]
+}
+
 @test "assert_regex() <value> <pattern>: outputs multi-line <value> nicely when it fails" {
   run assert_regex $'bcd\n123' '^[a-z]b[c-z]+'
   assert_test_fail <<'ERR_MSG'
