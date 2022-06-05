@@ -38,6 +38,7 @@ This project provides the following functions:
  - [assert_success](#assert_success) / [assert_failure](#assert_failure) Assert exit status is `0` or `1`.
  - [assert_output](#assert_output) / [refute_output](#refute_output) Assert output does (or does not) contain given content.
  - [assert_line](#assert_line) / [refute_line](#refute_line) Assert a specific line of output does (or does not) contain given content.
+ - [assert_regex](#assert_regex) / [refute_regex](#refute_regex) Assert a parameter does (or does not) match given pattern.
 
 These commands are described in more detail below.
 
