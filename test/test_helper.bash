@@ -1,5 +1,5 @@
 # Load dependencies.
-load "${BATS_TEST_DIRNAME}/../node_modules/bats-support/load.bash"
+bats_load_library 'bats-support'
 
 # Load library.
 load '../load'
