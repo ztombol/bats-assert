@@ -5,7 +5,7 @@ name: Tests
 
 on:
   push:
-    branches: [ master ]
+  workflow_dispatch:
   pull_request:
     branches: [ master ]
 
@@ -13,8 +13,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    env:
-      BATS_LIB_PATH: /usr/lib/npm/node_modules
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
@@ -24,5 +22,5 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-    - run: npm install --loglevel verbose
-    - run: npm test
+    - run: npm install
+    - run: BATS_LIB_PATH="$PWD/node_modules" npm test
