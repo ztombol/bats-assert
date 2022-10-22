@@ -1,8 +1,8 @@
 {
   "name": "bats-assert",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Common assertions for Bats",
-  "homepage": "https://github.com/jasonkarns/bats-assert-1",
+  "homepage": "https://github.com/bats-core/bats-assert",
   "license": "CC0-1.0",
   "author": "Zoltán Tömböl (https://github.com/ztombol)",
   "contributors": [
@@ -11,8 +11,8 @@
     "Mislav Marohnić <mislav.marohnic@gmail.com> (http://mislav.net/)",
     "Tim Pope (https://github.com/tpope)"
   ],
-  "repository": "github:jasonkarns/bats-assert-1",
-  "bugs": "https://github.com/jasonkarns/bats-assert-1/issues",
+  "repository": "github:bats-core/bats-assert",
+  "bugs": "https://github.com/bats-core/bats-assert/issues",
   "directories": {
     "lib": "src",
     "test": "test"
@@ -44,5 +44,8 @@
     "assert",
     "assertion",
     "helper"
-  ]
+  ],
+  "dependencies": {
+    "verbose": "^0.2.3"
+  }
 }
