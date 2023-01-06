@@ -36,7 +36,7 @@ assert_regex() {
 	local -r value="${1}"
 	local -r pattern="${2}"
 
-	if [[ '' =~ ${pattern} ]] || (( ${?} == 2 )); then
+	if [[ '' =~ ${pattern} ]]; (( ${?} == 2 )); then
 		echo "Invalid extended regular expression: \`${pattern}'" \
 		| batslib_decorate 'ERROR: assert_regex' \
 		| fail
