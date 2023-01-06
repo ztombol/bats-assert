@@ -80,3 +80,8 @@ Invalid extended regular expression: `[.*'
 --
 ERR_MSG
 }
+
+@test "assert_regex allows regex matching empty string (see #53)" {
+  run assert_regex any_value '.*'
+  assert_success
+}
