@@ -44,8 +44,5 @@
     "assert",
     "assertion",
     "helper"
-  ],
-  "dependencies": {
-    "verbose": "^0.2.3"
-  }
+  ]
 }
