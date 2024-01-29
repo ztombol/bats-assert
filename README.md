@@ -198,6 +198,15 @@ The expected output can be specified with a heredoc or standard input as well.
 }
 ```
 
+$output can be overridden.
+
+```bash
+@test 'assert_output() with $stderr' {
+  run --separate-stderr sh -c ">&2 echo 'have'"
+  output=$stderr assert_output 'want'
+}
+```
+
 On failure, the expected and actual output are displayed.
 
 ```
